@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "product_category")
+@Table(name = "product_categories")
 @Getter
 @Setter
 @Builder
@@ -16,5 +16,5 @@ import lombok.*;
 public class CategoryEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
-    String categoryName;
+    private String categoryName;
 }
