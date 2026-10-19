@@ -4,11 +4,13 @@ import com.spring.backend.module.security.permission.Perm;
 import com.spring.backend.module.user.user.dto.request.AssignRolesRequest;
 import com.spring.backend.module.user.user.dto.request.ChangePasswordRequest;
 import com.spring.backend.module.user.user.dto.request.UpdateUserRequest;
+
 import com.spring.backend.module.user.user.dto.response.UserResponse;
 import com.spring.backend.module.user.user.service.interfaces.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -40,8 +42,9 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("hasAuthority('" + Perm.USER_READ + "')")
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<Page<UserResponse>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(userService.getAllUsers(page, size));
     }
 
     /**

@@ -4,12 +4,14 @@ import com.spring.backend.module.user.user.dto.request.AssignRolesRequest;
 import com.spring.backend.module.user.user.dto.request.ChangePasswordRequest;
 import com.spring.backend.module.user.user.dto.request.UpdateUserRequest;
 import com.spring.backend.module.user.user.dto.response.UserResponse;
+import org.springframework.data.domain.Page;
+
 
 import java.util.List;
 
 public interface UserService {
 
-    List<UserResponse> getAllUsers();
+    Page<UserResponse> getAllUsers(int page, int size);
 
     UserResponse getUserById(Long id);
 

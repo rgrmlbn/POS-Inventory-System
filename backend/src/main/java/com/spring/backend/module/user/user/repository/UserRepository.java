@@ -1,6 +1,7 @@
 package com.spring.backend.module.user.user.repository;
 
 import com.spring.backend.module.user.user.entity.UserEntity;
+import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -44,7 +45,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      */
     @Override
     @EntityGraph(attributePaths = {"roles", "roles.permissions"})
-    List<UserEntity> findAll();
+    Page<UserEntity> findAll();
 
     /**
      * Counts the users holding the role with the given name.

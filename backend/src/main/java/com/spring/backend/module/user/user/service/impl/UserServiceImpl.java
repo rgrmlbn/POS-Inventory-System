@@ -23,10 +23,14 @@ import com.spring.backend.module.user.user.mapper.UserMapper;
 import com.spring.backend.module.user.user.repository.UserRepository;
 import com.spring.backend.module.user.user.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.HashSet;
 import java.util.List;
@@ -62,10 +66,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toResponse)
-                .toList();
+    public Page<UserResponse> getAllUsers(int page, int size) {
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<UserEntity> user = userRepository.findAll(pageable);
+
+        return user.map(UserEntity -> userMapper.toResponse(UserEntity));
     }
 
     /**
