@@ -3,12 +3,13 @@ package com.spring.backend.module.product.category.service.interfaces;
 import com.spring.backend.module.product.category.dto.request.CategoryCreateRequest;
 import com.spring.backend.module.product.category.dto.request.CategoryUpdateRequest;
 import com.spring.backend.module.product.category.dto.response.CategoryResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    List<CategoryResponse> getAllCategories();
+    Page<CategoryResponse> getAllCategories(String categoryName, int size, int page);
 
     CategoryResponse getCategoryById(Long id);
 

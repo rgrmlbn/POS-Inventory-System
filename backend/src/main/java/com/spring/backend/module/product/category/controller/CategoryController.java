@@ -8,6 +8,7 @@ import com.spring.backend.module.security.permission.Perm;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,9 +27,12 @@ public class CategoryController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('" + Perm.CATEGORY_READ + "')")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+    public ResponseEntity<Page<CategoryResponse>> getAllCategories(
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(categoryService.getAllCategories());
+        return ResponseEntity.ok(categoryService.getAllCategories(categoryName, page, size));
     }
 
     @GetMapping("/{id}")

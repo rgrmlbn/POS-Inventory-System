@@ -10,6 +10,8 @@ import com.spring.backend.module.product.category.mapper.CategoryMapper;
 import com.spring.backend.module.product.category.repository.CategoryRepository;
 import com.spring.backend.module.product.category.service.interfaces.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +26,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll()
-                .stream()
-                .map(category -> categoryMapper.toResponse(category))
-                .toList();
+    public Page<CategoryResponse> getAllCategories(String categoryName, int page, int size) {
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<CategoryEntity> category = categoryRepository.findAllByCategoryNameContainingIgnoreCase(categoryName, pageable);
+
+
+        return category.map(CategoryEntity -> categoryMapper.toResponse(CategoryEntity));
     }
 
     @Override
@@ -45,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryResponse createCategory(CategoryCreateRequest request) {
 
-        if(categoryRepository.existsByName(request.getCategoryName())){
+        if(categoryRepository.existsByCategoryName(request.getCategoryName())){
             throw new DuplicateCategoryException();
         }
 
@@ -65,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if(request.getCategoryName() != null && !request.getCategoryName().isBlank()){
 
-            if(categoryRepository.existsByName(request.getCategoryName())){
+            if(categoryRepository.existsByCategoryName(request.getCategoryName())){
                 throw new DuplicateCategoryException();
             }
 

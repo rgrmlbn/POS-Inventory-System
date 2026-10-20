@@ -66,11 +66,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<UserResponse> getAllUsers(int page, int size) {
+    public Page<UserResponse> getAllUsers(String name, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
-        Page<UserEntity> user = userRepository.findAll(pageable);
+        Page<UserEntity> user = userRepository.findAllByNameContainingIgnoreCase(name, pageable);
 
         return user.map(UserEntity -> userMapper.toResponse(UserEntity));
     }
@@ -225,7 +225,9 @@ public class UserServiceImpl implements UserService {
 
         user.setRoles(new HashSet<>(roles));
 
-        return userMapper.toResponse(userRepository.save(user));
+        UserEntity savedUser = userRepository.save(user);
+
+        return userMapper.toResponse(savedUser);
     }
 
     /**
@@ -295,6 +297,7 @@ public class UserServiceImpl implements UserService {
      * @throws ResourceNotFoundException if the user does not exist
      */
     private UserEntity findWithRoles(Long id) {
+
         return userRepository.findWithRolesById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User"));
     }
@@ -307,7 +310,7 @@ public class UserServiceImpl implements UserService {
      */
     private boolean isSuperAdmin(UserEntity user) {
         return user.getRoles().stream()
-                .anyMatch(role -> RoleNames.SUPER_ADMIN.equals(role.getName()));
+                .anyMatch(RoleEntity -> RoleNames.SUPER_ADMIN.equals(RoleEntity.getName()));
     }
 
     /**

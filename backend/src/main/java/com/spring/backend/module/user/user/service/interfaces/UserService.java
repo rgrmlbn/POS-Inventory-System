@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface UserService {
 
-    Page<UserResponse> getAllUsers(int page, int size);
+    Page<UserResponse> getAllUsers(String name, int page, int size);
 
     UserResponse getUserById(Long id);
 

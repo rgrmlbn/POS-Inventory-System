@@ -1,9 +1,12 @@
 package com.spring.backend.module.user.user.repository;
 
 import com.spring.backend.module.user.user.entity.UserEntity;
-import org.hibernate.query.Page;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -39,13 +42,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @EntityGraph(attributePaths = {"roles", "roles.permissions"})
     Optional<UserEntity> findWithRolesById(Long id);
 
-    /**
-     * Returns all users with their roles and permissions, avoiding extra queries
-     * when they are mapped to responses.
-     */
-    @Override
+
     @EntityGraph(attributePaths = {"roles", "roles.permissions"})
-    Page<UserEntity> findAll();
+    Page<UserEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 
     /**
      * Counts the users holding the role with the given name.

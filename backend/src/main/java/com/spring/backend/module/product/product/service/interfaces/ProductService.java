@@ -3,12 +3,13 @@ package com.spring.backend.module.product.product.service.interfaces;
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductResponse> getAllProducts();
+    Page<ProductResponse> getAllProducts(String productName, int page, int size);
 
     ProductResponse getProductById(Long id);
 

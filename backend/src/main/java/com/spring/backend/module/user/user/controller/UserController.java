@@ -42,9 +42,12 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("hasAuthority('" + Perm.USER_READ + "')")
-    public ResponseEntity<Page<UserResponse>> getAllUsers(@RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(userService.getAllUsers(page, size));
+    public ResponseEntity<Page<UserResponse>> getAllUsers(
+            @RequestParam (required = false ) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(userService.getAllUsers(name, page, size));
     }
 
     /**
