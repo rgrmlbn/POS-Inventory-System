@@ -32,7 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         Page<CategoryEntity> category = categoryRepository.findAllByCategoryNameContainingIgnoreCase(categoryName, pageable);
 
-
         return category.map(CategoryEntity -> categoryMapper.toResponse(CategoryEntity));
     }
 

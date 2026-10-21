@@ -1,5 +1,6 @@
 package com.spring.backend.module.product.product.service.interfaces;
 
+import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
@@ -13,13 +14,11 @@ public interface ProductService {
 
     ProductResponse getProductById(Long id);
 
-    ProductResponse getProductByName(String name);
+    Page<ProductResponse> getProductBySku(String sku, int page, int size);
 
-    ProductResponse getProductBySku(String sku);
+    Page<ProductResponse> getProductByCategoryId(Long categoryId, int page, int size);
 
-    ProductResponse getProductByCategoryId(Long categoryId);
-
-    ProductResponse createProduct(ProductCreateRequest request);
+    ProductResponse createProduct(ProductCreateRequest request, CategoryEntity category);
 
     ProductResponse updateProduct(Long id, ProductUpdateRequest update);
 

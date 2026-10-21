@@ -85,7 +85,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse getUserById(Long id) {
-        return userMapper.toResponse(findWithRoles(id));
+
+        UserEntity user = userRepository.findWithRolesById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User"));
+
+        return userMapper.toResponse(user);
     }
 
     /**
@@ -100,7 +104,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse updateUserById(Long id, UpdateUserRequest update) {
-        UserEntity user = findWithRoles(id);
+        UserEntity user = userRepository.findWithRolesById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User"));
 
         if (update.getName() != null && !update.getName().isBlank()) {
             user.setName(update.getName());
@@ -132,7 +137,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void changePasswordById(Long id, ChangePasswordRequest request) {
-        UserEntity user = userRepository.findById(id)
+        UserEntity user = userRepository.findWithRolesById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User"));
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
@@ -164,7 +169,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        UserEntity user = findWithRoles(id);
+        UserEntity user = userRepository.findWithRolesById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User"));
 
         if (isSuperAdmin(user) && isLastSuperAdmin()) {
             throw new LastSuperAdminException();
@@ -198,7 +204,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse assignRolesById(Long id, AssignRolesRequest request) {
-        UserEntity user = findWithRoles(id);
+        UserEntity user = userRepository.findWithRolesById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User"));
 
         Set<Long> requestedIds = request.getRoleIds();
         List<RoleEntity> roles = roleRepository.findAllById(requestedIds);
@@ -288,19 +295,6 @@ public class UserServiceImpl implements UserService {
     }
 
     // HELPER
-
-    /**
-     * Finds a user by ID with their roles loaded.
-     *
-     * @param id the ID of the user to find
-     * @return the user with their roles
-     * @throws ResourceNotFoundException if the user does not exist
-     */
-    private UserEntity findWithRoles(Long id) {
-
-        return userRepository.findWithRolesById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User"));
-    }
 
     /**
      * Checks whether a user has the SUPER_ADMIN role.
