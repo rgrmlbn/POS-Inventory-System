@@ -33,27 +33,27 @@ public class ProductServiceImpl implements ProductService {
         return product.map(ProductEntity -> productMapper.toResponse(ProductEntity));
     }
 
-//    @Override
-//    public ProductResponse getProductById(Long id) {
-//
-//        ProductEntity product = productRepository.findProductWithCategory(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Product"));
-//
-//        return productMapper.toResponse(product);
-//    }
-//
-//    @Override
-//    public Page<ProductResponse> getProductBySku(String sku, int page, int size) {
-//
-//        Pageable pageable = Pageable.ofSize(size).withPage(page);
-//
-//        Page<ProductEntity> product = productRepository.findAllSkuContainingIgnoreCase(sku, pageable);
-//
-//        return product.map(ProductEntity -> productMapper.toResponse(ProductEntity));
-//    }
+    @Override
+    public ProductResponse getProductById(Long productId) {
+
+        ProductEntity product = productRepository.findProductById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+
+        return productMapper.toResponse(product);
+    }
 
     @Override
-    public Page<ProductResponse> getProductByCategoryId(Long categoryId, int page, int size) {
+    public Page<ProductResponse> getProductBySku(String sku, int page, int size) {
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<ProductEntity> product = productRepository.findAllBySkuContainingIgnoreCase(sku, pageable);
+
+        return product.map(ProductEntity -> productMapper.toResponse(ProductEntity));
+    }
+
+    @Override
+    public Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 

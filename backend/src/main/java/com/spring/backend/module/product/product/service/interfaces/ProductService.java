@@ -16,7 +16,7 @@ public interface ProductService {
 
     Page<ProductResponse> getProductBySku(String sku, int page, int size);
 
-    Page<ProductResponse> getProductByCategoryId(Long categoryId, int page, int size);
+    Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size);
 
     ProductResponse createProduct(ProductCreateRequest request, CategoryEntity category);
 
