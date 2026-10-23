@@ -18,11 +18,11 @@ public interface ProductService {
 
     Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size);
 
-    ProductResponse createProduct(ProductCreateRequest request, CategoryEntity category);
+    ProductResponse createProduct(ProductCreateRequest request);
 
     ProductResponse updateProduct(Long id, ProductUpdateRequest update);
 
-    void deleteProduct(Long id);
+    void deleteProductById(Long id);
 
     void deleteAllProducts();
 }

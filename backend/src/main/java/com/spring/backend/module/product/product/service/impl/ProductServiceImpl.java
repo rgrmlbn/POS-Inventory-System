@@ -3,6 +3,7 @@ package com.spring.backend.module.product.product.service.impl;
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
 import com.spring.backend.module.exception.products.products.DuplicateProductException;
 import com.spring.backend.module.product.category.entity.CategoryEntity;
+import com.spring.backend.module.product.category.repository.CategoryRepository;
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
@@ -20,8 +21,8 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
-
 
     @Override
     public Page<ProductResponse> getAllProducts(String productName, int page, int size) {
@@ -63,7 +64,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse createProduct(ProductCreateRequest request, CategoryEntity category) {
+    public ProductResponse createProduct(ProductCreateRequest request) {
+
+        CategoryEntity category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category"));
 
         ProductEntity product = productMapper.toEntity(request, category);
 
@@ -95,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long productId) {
+    public void deleteProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));

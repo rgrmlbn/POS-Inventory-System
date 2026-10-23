@@ -97,7 +97,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete-all")
-    @PreAuthorize("hasAuthority('" + Perm.USER_DELETE_ALL + "')")
+    @PreAuthorize("hasAuthority('" + Perm.USER_DELETE + "')")
     public ResponseEntity<Void> deleteAllUsers() {
 
         userService.deleteAllUsers();

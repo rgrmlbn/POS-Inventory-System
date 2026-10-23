@@ -65,7 +65,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete-all")
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_DELETE_ALL + "')")
+    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_DELETE + "')")
     public ResponseEntity<Void> deleteAllCategories() {
 
         categoryService.deleteAllCategories();
