@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(readOnly = true)
     public List<RoleResponse> getAllRoles() {
         return roleRepository.findAll().stream()
-                .map(roleMapper::toResponse)
+                .map(RoleEntity -> roleMapper.toResponse(RoleEntity))
                 .toList();
     }
 
@@ -68,20 +68,21 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     public RoleResponse getRoleById(Long id) {
-        return roleMapper.toResponse(find(id));
-    }
 
+        RoleEntity role = roleRepository.findWithPermissionsById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role"));
+
+        return roleMapper.toResponse(role);
+    }
     /**
-     * Creates a new role with an optional set of permissions.
+     * Creates a new role with no permissions.
      *
      * <p>The role name is normalized before checking for duplicates and saving.
-     * Requested permissions are validated against privilege escalation rules
-     * before they are assigned to the role.
+     * Permissions are assigned separately through {@link #setPermissions(Long, SetRolePermissionsRequest)}.
      *
-     * @param request the role name, description, and optional permission names
+     * @param request the role name and description
      * @return the newly created role's details
      * @throws DuplicateRoleException if a role with the same name already exists
-     * @throws ResourceNotFoundException if any requested permission does not exist
      */
     @Override
     @Transactional
@@ -96,15 +97,6 @@ public class RoleServiceImpl implements RoleService {
                 .name(name)
                 .description(request.getDescription())
                 .build();
-
-        if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
-            Set<PermissionEntity> permissions = resolvePermissions(request.getPermissions());
-
-            // → Prevent assigning permissions that the caller is not authorized to grant.
-            escalationGuard.assertCanGrant(request.getPermissions());
-
-            role.setPermissions(permissions);
-        }
 
         return roleMapper.toResponse(roleRepository.save(role));
     }
@@ -125,7 +117,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleResponse updateRole(Long id, UpdateRoleRequest request) {
-        RoleEntity role = find(id);
+        RoleEntity role = roleRepository.findWithPermissionsById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
         if (request.getName() != null && !request.getName().isBlank()) {
             String name = normalize(request.getName());
@@ -166,7 +159,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleResponse setPermissions(Long id, SetRolePermissionsRequest request) {
-        RoleEntity role = find(id);
+        RoleEntity role = roleRepository.findWithPermissionsById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
         // → SUPER_ADMIN must retain its permissions to prevent the system from being locked out.
         if (RoleNames.SUPER_ADMIN.equals(role.getName())) {
@@ -194,7 +188,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void deleteRole(Long id) {
-        RoleEntity role = find(id);
+        RoleEntity role = roleRepository.findWithPermissionsById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
         // → System roles are required for the application's built-in security rules.
         if (role.isSystemRole()) {
@@ -212,33 +207,24 @@ public class RoleServiceImpl implements RoleService {
     // HELPER
 
     /**
-     * Finds a role by ID with its permissions loaded.
-     *
-     * @param id the ID of the role to find
-     * @return the role with its permissions
-     * @throws ResourceNotFoundException if the role does not exist
-     */
-    private RoleEntity find(Long id) {
-        return roleRepository.findWithPermissionsById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role"));
-    }
-
-    /**
      * Resolves permission names to their corresponding entities.
      *
-     * <p>The repository may return fewer permissions than requested when some
-     * names do not exist, so the result size is checked before returning.
+     * <p>Each name is looked up individually, and the first unknown name
+     * causes an exception.
      *
      * @param names the permission names to resolve
      * @return the set of matching permission entities
      * @throws ResourceNotFoundException if any requested permission does not exist
      */
     private Set<PermissionEntity> resolvePermissions(Set<String> names) {
-        Set<PermissionEntity> found = new HashSet<>(permissionRepository.findAllByNameIn(names));
+        Set<PermissionEntity> found = new HashSet<>();
 
-        // → Detect unknown permission names because findAllByNameIn skips unmatched names.
-        if (found.size() != names.size()) {
-            throw new ResourceNotFoundException("Permission");
+        for (String name : names) {
+            // → Look up each permission by name and fail on the first unknown one.
+            PermissionEntity permission = permissionRepository.findByName(name)
+                    .orElseThrow(() -> new ResourceNotFoundException("Permission"));
+
+            found.add(permission);
         }
 
         return found;

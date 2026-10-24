@@ -15,11 +15,10 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 public class CreateRoleRequest {
-    @NotBlank @Size(min = 2, max = 50)
+    @NotBlank(message = "Role name is required.") @Size(min = 2, max = 50)
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_ ]*$", message = "Only letters, numbers, spaces and underscores")
     private String name;
 
     @Size(max = 255) private String description;
 
-    private Set<@NotBlank String> permissions;
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 public class SetRolePermissionsRequest {
-    @NotNull
-    @NotBlank
+
+    @NotNull(message = "Permission is required.")
     private Set<String> permissions;
 }

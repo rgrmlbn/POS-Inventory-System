@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PermissionRepository extends JpaRepository<PermissionEntity, Long> {
-    List<PermissionEntity> findAllByNameIn(Collection<String> names);
+    Optional<PermissionEntity> findByName(String name);
 }
