@@ -27,13 +27,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductResponse> getAllProducts(String productName, int page, int size) {
+    public Page<ProductResponse> getAllProducts(
+            String productName,
+            int page,
+            int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
-        Page<ProductEntity> product = productRepository.findAllByProductNameContainingIgnoreCase(productName, pageable);
+        Page<ProductEntity> products;
 
-        return product.map(ProductEntity -> productMapper.toResponse(ProductEntity));
+        if (productName == null || productName.isBlank()) {
+            products = productRepository.findAll(pageable);
+        } else {
+            products = productRepository
+                    .findAllByProductNameContainingIgnoreCase(
+                            productName.trim(),
+                            pageable
+                    );
+        }
+
+        return products.map(productMapper::toResponse);
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.spring.backend.module.security.filter.RateLimitFilter;
 
 /**
  * Configures the application's Spring Security settings.
@@ -39,6 +40,7 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthEntryPoint authEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final RateLimitFilter rateLimitFilter;
 
     /**
      * Configures the application's HTTP security filter chain.
@@ -80,7 +82,10 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/h2-console/**"
+                                "/h2-console/**",
+
+                                // -> Public product endpoints
+                                "/api/v1/products"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -97,27 +102,11 @@ public class SecurityConfig {
                 )
 
                 // → Register the authentication provider and run JWT validation before
-                // → Spring Security's username/password authentication filter.
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimitFilter, JwtFilter.class);
 
         return http.build();
     }
 
-    /**
-     * Configures the authentication provider used to verify user credentials.
-     *
-     * <p>Uses the configured {@link UserDetailsService} to load user accounts
-     * and the {@link PasswordEncoder} to verify submitted passwords.
-     *
-     * @return the configured DAO authentication provider
-     */
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
 
-        return provider;
-    }
 }

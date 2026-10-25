@@ -1,6 +1,6 @@
 package com.spring.backend.module.user.token.service.impl;
 
-import com.spring.backend.module.config.JwtProperties;
+import com.spring.backend.module.properties.JwtProperties;
 import com.spring.backend.module.exception.user.auth.InvalidTokenException;
 import com.spring.backend.module.exception.user.auth.TokenExpiredException;
 import com.spring.backend.module.exception.user.auth.TokenRevokedException;

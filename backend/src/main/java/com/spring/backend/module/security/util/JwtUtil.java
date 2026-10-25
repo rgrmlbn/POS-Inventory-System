@@ -1,6 +1,6 @@
 package com.spring.backend.module.security.util;
 
-import com.spring.backend.module.config.JwtProperties;
+import com.spring.backend.module.properties.JwtProperties;
 import com.spring.backend.module.security.principal.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

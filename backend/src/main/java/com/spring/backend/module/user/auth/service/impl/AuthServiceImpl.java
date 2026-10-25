@@ -11,7 +11,6 @@ import com.spring.backend.module.user.auth.dto.request.RegisterRequest;
 import com.spring.backend.module.user.auth.dto.response.AuthResponse;
 import com.spring.backend.module.user.auth.dto.response.RegisterResponse;
 import com.spring.backend.module.user.auth.service.interfaces.AuthService;
-import com.spring.backend.module.user.auth.service.interfaces.LoginRateLimiterService;
 import com.spring.backend.module.user.role.entity.RoleEntity;
 import com.spring.backend.module.user.role.repository.RoleRepository;
 import com.spring.backend.module.user.token.entity.RefreshToken;
@@ -49,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final TokenBlacklistService tokenBlacklistService;
-    private final LoginRateLimiterService loginRateLimiterService;
 
     /**
      * Registers a new user and assigns the default USER role.
@@ -88,9 +86,6 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public AuthResponse login(LoginRequest request) {
-
-        // → Check rate limits before authenticating to prevent blocked callers from repeatedly attempting to guess passwords.
-        loginRateLimiterService.checkLimits(request.getEmail());
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));

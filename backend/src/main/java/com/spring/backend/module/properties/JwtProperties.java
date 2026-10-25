@@ -1,4 +1,4 @@
-package com.spring.backend.module.config;
+package com.spring.backend.module.properties;
 
 import lombok.Getter;
 import lombok.Setter;

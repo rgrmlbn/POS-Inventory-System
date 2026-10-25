@@ -26,7 +26,6 @@ public class ProductController {
 
 
     @GetMapping
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
             @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,

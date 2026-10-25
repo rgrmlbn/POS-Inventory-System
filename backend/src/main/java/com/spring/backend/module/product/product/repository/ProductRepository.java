@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     @EntityGraph(attributePaths = {"category"})
+    Page<ProductEntity> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"category"})
     Page<ProductEntity> findAllByProductNameContainingIgnoreCase(
             String productName,
             Pageable pageable
