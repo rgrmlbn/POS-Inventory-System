@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
  *
  * <p>Each endpoint requires the permission noted on the method. Role assignment
  * is in {@link UserRoleController}, and endpoints for the authenticated user's
- * own account are in {@link MeController}.
+ * own account are in {@link UserProfileController}.
  */
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Validated
-public class UserController {
+public class UserAdminController {
 
     private final UserAdminService userAdminService;
 

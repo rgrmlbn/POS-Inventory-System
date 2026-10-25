@@ -11,6 +11,7 @@ import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.mapper.ProductMapper;
 import com.spring.backend.module.product.product.repository.ProductRepository;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProductResponse> getAllProducts(String productName, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -35,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductResponse getProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)
@@ -44,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProductResponse> getProductBySku(String sku, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -54,6 +58,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -64,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse createProduct(ProductCreateRequest request) {
 
         CategoryEntity category = categoryRepository.findById(request.getCategoryId())
@@ -77,28 +83,29 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse updateProduct(Long productId, ProductUpdateRequest update) {
 
         ProductEntity product = productRepository.findProductById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
-        if(update.getProductName() != null && !update.getProductName().isBlank()){
+        if (update.getProductName() != null && !update.getProductName().isBlank()) {
             product.setProductName(update.getProductName());
         }
 
-        if(update.getSku() != null && !update.getSku().isBlank()){
-
-            if(product.getSku().equals(update.getSku())){
+        if (update.getSku() != null && !update.getSku().isBlank()) {
+            if (!product.getSku().equals(update.getSku())
+                    && productRepository.existsBySku(update.getSku())) {
                 throw new DuplicateProductException();
             }
-
             product.setSku(update.getSku());
         }
 
-        return null;
+        return productMapper.toResponse(productRepository.save(product));
     }
 
     @Override
+    @Transactional
     public void deleteProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)
@@ -109,6 +116,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteAllProducts() {
 
         productRepository.deleteAll();

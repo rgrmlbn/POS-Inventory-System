@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/products/")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Validated
 public class ProductController {
@@ -35,7 +35,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts(productName, page, size));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{productId}")
     @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
     public ResponseEntity<ProductResponse> getProductById(
             @PathVariable @Positive Long productId){
@@ -53,7 +53,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductBySku(sku, page, size));
     }
 
-    @GetMapping("/category/{id}")
+    @GetMapping("/category/{categoryId}")
     @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
     public ResponseEntity<Page<ProductResponse>>getAllProductsByCategoryId(
             @PathVariable @Positive Long categoryId,
@@ -72,7 +72,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(request));
     }
 
-    @PatchMapping("/{id}/update")
+    @PatchMapping("/{productId}/update")
     @PreAuthorize("hasAuthority('" + Perm.PRODUCT_UPDATE + "')")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable @Positive Long productId,
@@ -81,7 +81,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(productId, update));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{productId}/delete")
     @PreAuthorize("hasAuthority('" + Perm.PRODUCT_DELETE + "')")
     public ResponseEntity<Void> deleteProductById(
             @PathVariable @Positive Long productId){

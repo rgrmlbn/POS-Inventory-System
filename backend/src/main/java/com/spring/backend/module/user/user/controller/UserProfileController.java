@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users/me")
 @RequiredArgsConstructor
 @Validated
-public class MeController {
+public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
