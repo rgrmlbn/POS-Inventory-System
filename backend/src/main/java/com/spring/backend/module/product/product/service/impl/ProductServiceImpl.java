@@ -11,6 +11,7 @@ import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.mapper.ProductMapper;
 import com.spring.backend.module.product.product.repository.ProductRepository;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
+import com.spring.backend.module.shared.response.PageResponse;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductResponse> getAllProducts(
+    public PageResponse<ProductResponse> getAllProducts(
             String productName,
             int page,
             int size) {
@@ -61,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductResponse> getProductBySku(String sku, int page, int size) {
+    public PageResponse<ProductResponse> getProductBySku(String sku, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
@@ -72,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size) {
+    public PageResponse<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 

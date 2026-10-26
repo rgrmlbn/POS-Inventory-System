@@ -151,6 +151,12 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Cache -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+
 
 		<!-- Testing -->
 		<dependency>
