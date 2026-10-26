@@ -6,11 +6,11 @@ import com.spring.backend.module.product.product.dto.request.ProductUpdateReques
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
 import com.spring.backend.module.security.permission.Perm;
-import com.spring.backend.module.shared.response.PageResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +27,7 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<PageResponse<ProductResponse>> getAllProducts(
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(
             @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
@@ -45,7 +45,7 @@ public class ProductController {
 
     @GetMapping("/sku")
     @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
-    public ResponseEntity<PageResponse<ProductResponse>> getProductBySku(
+    public ResponseEntity<Page<ProductResponse>> getProductBySku(
             @RequestParam(required = false) String sku,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -55,7 +55,7 @@ public class ProductController {
 
     @GetMapping("/category/{categoryId}")
     @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
-    public ResponseEntity<PageResponse<ProductResponse>>getAllProductsByCategoryId(
+    public ResponseEntity<Page<ProductResponse>>getAllProductsByCategoryId(
             @PathVariable @Positive Long categoryId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
