@@ -11,7 +11,10 @@ import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.mapper.ProductMapper;
 import com.spring.backend.module.product.product.repository.ProductRepository;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +31,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    // getAllProducts
     @Cacheable("productPagesAll")
     public Page<ProductResponse> getAllProducts(
             String productName,
@@ -64,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("productPagesSku")
     public Page<ProductResponse> getProductBySku(String sku, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -75,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "product", key = "#productId")
     public Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -86,6 +90,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = {"productPagesAll", "productPagesSku", "productPagesCategory"}, allEntries = true)
     public ProductResponse createProduct(ProductCreateRequest request) {
 
         CategoryEntity category = categoryRepository.findById(request.getCategoryId())
@@ -100,6 +105,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @Caching(
+            put = @CachePut(value = "product", key = "#productId"),
+            evict = @CacheEvict(cacheNames = {"productPagesAll", "productPagesSku", "productPagesCategory"}, allEntries = true)
+    )
     public ProductResponse updateProduct(Long productId, ProductUpdateRequest update) {
 
         ProductEntity product = productRepository.findProductById(productId)
@@ -122,6 +131,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "product", key = "#productId"),
+            @CacheEvict(cacheNames = {"productPagesAll", "productPagesSku", "productPagesCategory"}, allEntries = true)
+    })
     public void deleteProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)
@@ -133,6 +146,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "product", allEntries = true),
+            @CacheEvict(cacheNames = {"productPagesAll", "productPagesSku", "productPagesCategory"}, allEntries = true)
+    })
     public void deleteAllProducts() {
 
         productRepository.deleteAll();

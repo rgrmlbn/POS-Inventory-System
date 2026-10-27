@@ -34,7 +34,6 @@ import java.io.IOException;
  */
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final String BEARER_PREFIX = "Bearer ";
@@ -68,7 +67,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // -> Logout blacklists the token, so it must be rejected even though it has not expired
         if (tokenBlacklistService.isBlacklisted(jwt)) {
-            log.warn("Rejected blacklisted JWT for URI: {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
@@ -77,13 +75,11 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             userId = jwtUtil.extractUserId(jwt);
         } catch (ExpiredJwtException e) {
-            log.warn("JWT is expired: {}", e.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (JwtException | IllegalArgumentException e) {
             // -> Covers bad signatures, malformed tokens, and tokens issued before the
             // -> subject changed from email to user id
-            log.warn("Invalid JWT: {}", e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
@@ -99,7 +95,6 @@ public class JwtFilter extends OncePerRequestFilter {
             } catch (UsernameNotFoundException e) {
                 // -> The account was deleted after this token was issued. Without this catch the
                 // -> exception escapes the filter and the client gets a 500 instead of a 401
-                log.warn("JWT references a user that no longer exists: {}", userId);
             }
         }
 
