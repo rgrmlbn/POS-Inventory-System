@@ -87,16 +87,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleResponse createRole(CreateRoleRequest request) {
-        String name = normalize(request.getName());
+
+        RoleEntity role = roleMapper.toEntity(request);
+
+        String name = request.getName().trim().toUpperCase().replace(' ', '_');
 
         if (roleRepository.existsByName(name)) {
             throw new DuplicateRoleException();
         }
-
-        RoleEntity role = RoleEntity.builder()
-                .name(name)
-                .description(request.getDescription())
-                .build();
 
         return roleMapper.toResponse(roleRepository.save(role));
     }
@@ -121,7 +119,7 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
         if (request.getName() != null && !request.getName().isBlank()) {
-            String name = normalize(request.getName());
+            String name = request.getName().trim().toUpperCase().replace(' ', '_');
 
             if (!name.equals(role.getName())) {
                 // → Preserve system role names to protect built-in security rules.
@@ -159,20 +157,31 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleResponse setPermissions(Long id, SetRolePermissionsRequest request) {
+
+        // -> Find the role
         RoleEntity role = roleRepository.findWithPermissionsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
-        // → SUPER_ADMIN must retain its permissions to prevent the system from being locked out.
+        // S-> SUPER_ADMIN's permissions can never be changed
         if (RoleNames.SUPER_ADMIN.equals(role.getName())) {
             throw new RoleProtectedException();
         }
 
-        Set<PermissionEntity> permissions = resolvePermissions(request.getPermissions());
+        Set<String> requestedNames = request.getPermissions();
 
-        // → Prevent granting permissions beyond the caller's authorized privileges.
-        escalationGuard.assertCanGrant(request.getPermissions());
+        // -> Make sure the caller is allowed to grant these permissions
+        escalationGuard.assertCanGrant(requestedNames);
 
-        role.setPermissions(permissions);
+        // -> Fetch all requested permissions from the database in one query
+        List<PermissionEntity> foundPermissions = permissionRepository.findByNameIn(requestedNames);
+
+        // -> If we found fewer than requested, some names don't exist
+        if (foundPermissions.size() != requestedNames.size()) {
+            throw new ResourceNotFoundException("Permission");
+        }
+
+        // Step 6: Replace the role's permissions and save
+        role.setPermissions(new HashSet<>(foundPermissions));
 
         return roleMapper.toResponse(roleRepository.save(role));
     }
@@ -204,40 +213,5 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.delete(role);
     }
 
-    // HELPER
 
-    /**
-     * Resolves permission names to their corresponding entities.
-     *
-     * <p>Each name is looked up individually, and the first unknown name
-     * causes an exception.
-     *
-     * @param names the permission names to resolve
-     * @return the set of matching permission entities
-     * @throws ResourceNotFoundException if any requested permission does not exist
-     */
-    private Set<PermissionEntity> resolvePermissions(Set<String> names) {
-        Set<PermissionEntity> found = new HashSet<>();
-
-        for (String name : names) {
-            // → Look up each permission by name and fail on the first unknown one.
-            PermissionEntity permission = permissionRepository.findByName(name)
-                    .orElseThrow(() -> new ResourceNotFoundException("Permission"));
-
-            found.add(permission);
-        }
-
-        return found;
-    }
-
-    /**
-     * Normalizes a role name by trimming whitespace, converting it to uppercase,
-     * and replacing spaces with underscores.
-     *
-     * @param name the role name to normalize
-     * @return the normalized role name
-     */
-    private String normalize(String name) {
-        return name.trim().toUpperCase().replace(' ', '_');
-    }
 }

@@ -76,23 +76,13 @@ public class RbacBootstrap implements ApplicationRunner {
                 RoleEntity.builder()
                         .name(RoleNames.SUPER_ADMIN)
                         .description("Full access. Cannot be modified or deleted.")
-                        .systemRole(true)
                         .build());
 
         // → Ensure SUPER_ADMIN always has every declared permission.
         superAdmin.setPermissions(new HashSet<>(permissions.values()));
         superAdmin = roleRepository.save(superAdmin);
 
-        // → Create the default USER role only when it does not already exist.
-        roleRepository.findByName(RoleNames.USER).orElseGet(() ->
-                roleRepository.save(RoleEntity.builder()
-                        .name(RoleNames.USER)
-                        .description("Default role for registered users.")
-                        .systemRole(true)
-                        .build()));
-
-        // → Create the initial SUPER_ADMIN only with configured credentials,
-        //   no existing SUPER_ADMIN, and an unused email.
+        // → Create the initial SUPER_ADMIN only with configured credentials, no existing SUPER_ADMIN, and an unused email.
         if (!adminEmail.isBlank() && !adminPassword.isBlank()
                 && userRepository.countByRolesName(RoleNames.SUPER_ADMIN) == 0
                 && !userRepository.existsByEmail(adminEmail)) {

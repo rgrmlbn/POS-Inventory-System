@@ -22,13 +22,12 @@ public class RoleEntity extends BaseEntity {
 
     private String description;
 
-    // → Built-in roles (SUPER_ADMIN, USER) are protected from deletion/renaming
-    @Column(nullable = false)
-    private boolean systemRole = false;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "role_permissions",
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(
+            name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
     private Set<PermissionEntity> permissions = new HashSet<>();
 }
