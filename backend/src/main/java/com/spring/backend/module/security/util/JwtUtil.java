@@ -8,8 +8,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -31,8 +29,6 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-
-    private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
     private final JwtProperties jwtProperties;
 

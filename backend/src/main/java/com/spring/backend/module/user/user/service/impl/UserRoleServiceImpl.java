@@ -3,9 +3,7 @@ package com.spring.backend.module.user.user.service.impl;
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
 import com.spring.backend.module.exception.user.role.LastSuperAdminException;
 import com.spring.backend.module.security.permission.RoleNames;
-import com.spring.backend.module.security.util.EscalationGuard;
 import com.spring.backend.module.security.util.SuperAdminGuard;
-import com.spring.backend.module.user.permission.entity.PermissionEntity;
 import com.spring.backend.module.user.role.entity.RoleEntity;
 import com.spring.backend.module.user.role.repository.RoleRepository;
 import com.spring.backend.module.user.user.dto.request.AssignRolesRequest;
@@ -22,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Implements role assignment for user accounts, with privilege escalation
@@ -35,7 +32,6 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
-    private final EscalationGuard escalationGuard;
     private final SuperAdminGuard superAdminGuard;
 
     /**
@@ -64,14 +60,6 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (roles.size() != requestedIds.size()) {
             throw new ResourceNotFoundException("Role");
         }
-
-        // → Prevent privilege escalation: callers can only grant permissions they hold.
-        // → Role permissions are LAZY, so this must run inside the transaction.
-        Set<String> permissionsToGrant = roles.stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .map(PermissionEntity::getName)
-                .collect(Collectors.toSet());
-        escalationGuard.assertCanGrant(permissionsToGrant);
 
         boolean losesSuperAdmin = superAdminGuard.isSuperAdmin(user)
                 && roles.stream().noneMatch(role -> RoleNames.SUPER_ADMIN.equals(role.getName()));

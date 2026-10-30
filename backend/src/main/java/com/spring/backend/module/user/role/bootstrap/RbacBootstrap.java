@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
  */
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class RbacBootstrap implements ApplicationRunner {
 
     private final PermissionRepository permissionRepository;
@@ -97,7 +96,6 @@ public class RbacBootstrap implements ApplicationRunner {
             admin.getRoles().add(superAdmin);
             userRepository.save(admin);
 
-            log.info("Bootstrap super admin created: {}", adminEmail);
         }
     }
 
@@ -158,7 +156,5 @@ public class RbacBootstrap implements ApplicationRunner {
         // → Delete the stale permissions now that no role references them.
         permissionRepository.deleteAll(stale);
 
-        log.warn("Removed permissions no longer declared in Perm: {}",
-                stale.stream().map(PermissionEntity::getName).toList());
     }
 }

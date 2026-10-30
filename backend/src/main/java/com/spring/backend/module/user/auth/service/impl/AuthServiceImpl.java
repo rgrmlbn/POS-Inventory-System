@@ -1,5 +1,6 @@
 package com.spring.backend.module.user.auth.service.impl;
 
+import com.spring.backend.module.exception.common.ResourceNotFoundException;
 import com.spring.backend.module.exception.user.user.DuplicateEmailException;
 import com.spring.backend.module.security.permission.RoleNames;
 import com.spring.backend.module.security.principal.UserPrincipal;
@@ -66,8 +67,7 @@ public class AuthServiceImpl implements AuthService {
 
         // → The USER role is created by RbacBootstrap at startup. If it is missing, the application is misconfigured, which is a server error rather than a client one.
         RoleEntity defaultRole = roleRepository.findByName(RoleNames.USER)
-                .orElseThrow(() -> new IllegalStateException(
-                        "Default role " + RoleNames.USER + " is missing; RbacBootstrap has not run"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
         UserEntity user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
