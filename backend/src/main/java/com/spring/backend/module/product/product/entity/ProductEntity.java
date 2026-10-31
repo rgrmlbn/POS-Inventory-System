@@ -38,8 +38,4 @@ public class ProductEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Integer reorderLevel;
-
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean isActive = true;
 }

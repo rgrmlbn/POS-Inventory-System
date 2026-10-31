@@ -32,7 +32,6 @@ public class ProductMapper {
                 .costPrice(entity.getCostPrice())
                 .sellingPrice(entity.getSellingPrice())
                 .reorderLevel(entity.getReorderLevel())
-                .isActive(entity.getIsActive())
                 .build();
     }
 

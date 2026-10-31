@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 
 @Getter
 @Builder
-public class ProductResponse implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductResponse {
 
     private Long id;
     private String productName;
@@ -22,5 +22,4 @@ public class ProductResponse implements Serializable {
     private BigDecimal costPrice;
     private BigDecimal sellingPrice;
     private Integer reorderLevel;
-    private Boolean isActive;
 }
