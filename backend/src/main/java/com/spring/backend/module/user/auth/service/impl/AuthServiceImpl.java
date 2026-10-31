@@ -2,7 +2,6 @@ package com.spring.backend.module.user.auth.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
 import com.spring.backend.module.exception.user.user.DuplicateEmailException;
-import com.spring.backend.module.security.permission.RoleNames;
 import com.spring.backend.module.security.principal.UserPrincipal;
 import com.spring.backend.module.security.util.CurrentUser;
 import com.spring.backend.module.security.util.JwtUtil;
@@ -17,6 +16,7 @@ import com.spring.backend.module.user.role.repository.RoleRepository;
 import com.spring.backend.module.user.token.entity.RefreshToken;
 import com.spring.backend.module.user.token.service.interfaces.RefreshTokenService;
 import com.spring.backend.module.user.token.service.interfaces.TokenBlacklistService;
+import com.spring.backend.module.user.user.dto.response.UserResponse;
 import com.spring.backend.module.user.user.entity.UserEntity;
 import com.spring.backend.module.user.user.mapper.UserMapper;
 import com.spring.backend.module.user.user.repository.UserRepository;
@@ -60,14 +60,15 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     @Transactional
-    public RegisterResponse register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) {
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException();
         }
 
-        // → The USER role is created by RbacBootstrap at startup. If it is missing, the application is misconfigured, which is a server error rather than a client one.
-        RoleEntity defaultRole = roleRepository.findByName(RoleNames.USER)
-                .orElseThrow(() -> new ResourceNotFoundException("Role"));
+        // → The USER role is inserted by seed.sql. If it is missing, the database was not seeded.
+        RoleEntity defaultRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new ResourceNotFoundException("User"));
 
         UserEntity user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -75,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
 
         UserEntity savedUser = userRepository.save(user);
 
-        return userMapper.toRegisterResponse(savedUser);
+        return userMapper.toResponse(savedUser);
     }
 
     /**

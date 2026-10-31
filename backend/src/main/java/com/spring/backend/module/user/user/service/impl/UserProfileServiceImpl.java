@@ -1,7 +1,7 @@
 package com.spring.backend.module.user.user.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
-import com.spring.backend.module.exception.user.role.LastSuperAdminException;
+
 import com.spring.backend.module.security.util.CurrentUser;
 import com.spring.backend.module.user.user.dto.request.ChangePasswordRequest;
 import com.spring.backend.module.user.user.dto.request.UpdateUserRequest;
@@ -69,7 +69,6 @@ public class UserProfileServiceImpl implements UserProfileService {
      * @param id the ID of the account to delete; must match the authenticated user's ID
      * @throws AccessDeniedException if the ID belongs to another user
      * @throws ResourceNotFoundException if the user does not exist
-     * @throws LastSuperAdminException if the caller is the last SUPER_ADMIN
      */
     @Override
     @Transactional

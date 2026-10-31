@@ -1,6 +1,5 @@
 package com.spring.backend.module.user.permission.controller;
 
-import com.spring.backend.module.security.permission.Perm;
 import com.spring.backend.module.user.permission.dto.response.PermissionResponse;
 import com.spring.backend.module.user.permission.repository.PermissionRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class PermissionController {
      * @return a {@link ResponseEntity} containing the list of permissions
      */
     @GetMapping
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_READ + "')")
+    @PreAuthorize("hasAuthority('ROLE_READ)")
     public ResponseEntity<List<PermissionResponse>> getAllPermissions() {
 
         // → Retrieve permissions, convert them to response DTOs, and sort by name.

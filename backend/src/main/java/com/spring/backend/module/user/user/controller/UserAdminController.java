@@ -1,6 +1,5 @@
 package com.spring.backend.module.user.user.controller;
 
-import com.spring.backend.module.security.permission.Perm;
 import com.spring.backend.module.user.user.dto.request.UpdateUserRequest;
 import com.spring.backend.module.user.user.dto.response.UserResponse;
 import com.spring.backend.module.user.user.service.interfaces.UserAdminService;
@@ -36,7 +35,7 @@ public class UserAdminController {
      * @return 200 with a page of users
      */
     @GetMapping
-    @PreAuthorize("hasAuthority('" + Perm.USER_READ + "')")
+    @PreAuthorize("hasAuthority('USER_READ')")
     public ResponseEntity<Page<UserResponse>> getAllUsers(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
@@ -54,8 +53,10 @@ public class UserAdminController {
      * @return 200 with the user, or 404 if not found
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('" + Perm.USER_READ + "')")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable @Positive Long id) {
+    @PreAuthorize("hasAuthority('USER_READ')")
+    public ResponseEntity<UserResponse> getUserById(
+            @PathVariable @Positive Long id) {
+
         return ResponseEntity.ok(userAdminService.getUserById(id));
     }
 
@@ -69,10 +70,11 @@ public class UserAdminController {
      * @return 200 with the updated user, 404 if not found, or 409 if the email is already taken
      */
     @PatchMapping("/{id}/update")
-    @PreAuthorize("hasAuthority('" + Perm.USER_UPDATE + "')")
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ResponseEntity<UserResponse> updateUserById(
             @PathVariable @Positive Long id,
             @RequestBody @Valid UpdateUserRequest update) {
+
         return ResponseEntity.ok(userAdminService.updateUserById(id, update));
     }
 
@@ -85,17 +87,12 @@ public class UserAdminController {
      * @return 204 on success, 404 if not found, or 409 if the user is the last SUPER_ADMIN
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('" + Perm.USER_DELETE + "')")
-    public ResponseEntity<Void> deleteUserById(@PathVariable @Positive Long id) {
+    @PreAuthorize("hasAuthority('USER_DELETE')")
+    public ResponseEntity<Void> deleteUserById(
+            @PathVariable @Positive Long id) {
+
         userAdminService.deleteUserById(id);
-        return ResponseEntity.noContent().build();
-    }
 
-    @DeleteMapping("/delete-all")
-    @PreAuthorize("hasAuthority('" + Perm.USER_DELETE + "')")
-    public ResponseEntity<Void> deleteAllUsers() {
-
-        userAdminService.deleteAllUsers();
         return ResponseEntity.noContent().build();
     }
 }

@@ -20,5 +20,4 @@ public interface UserAdminService {
 
     void deleteUserById(Long id);
 
-    void deleteAllUsers();
 }

@@ -1,6 +1,6 @@
 package com.spring.backend.module.user.user.controller;
 
-import com.spring.backend.module.security.permission.Perm;
+
 import com.spring.backend.module.user.user.dto.request.AssignRolesRequest;
 import com.spring.backend.module.user.user.dto.response.UserResponse;
 import com.spring.backend.module.user.user.service.interfaces.UserRoleService;
@@ -35,7 +35,7 @@ public class UserRoleController {
      *         404 if the user or a role is not found, or 409 if it would remove the last SUPER_ADMIN
      */
     @PutMapping("/{id}/roles")
-    @PreAuthorize("hasAuthority('" + Perm.USER_ASSIGN_ROLE + "')")
+    @PreAuthorize("hasAuthority('USER_ASSIGN_ROLE')")
     public ResponseEntity<UserResponse> assignRoles(
             @PathVariable @Positive Long id,
             @RequestBody @Valid AssignRolesRequest request) {

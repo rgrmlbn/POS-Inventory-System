@@ -1,12 +1,11 @@
 package com.spring.backend.module.user.user.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
-import com.spring.backend.module.exception.user.role.LastSuperAdminException;
 import com.spring.backend.module.exception.user.user.DuplicateEmailException;
 import com.spring.backend.module.exception.user.user.IncorrectCurrentPasswordException;
 import com.spring.backend.module.exception.user.user.PasswordMismatchException;
 import com.spring.backend.module.exception.user.user.PasswordReuseException;
-import com.spring.backend.module.security.util.SuperAdminGuard;
+
 import com.spring.backend.module.user.token.service.interfaces.RefreshTokenService;
 import com.spring.backend.module.user.user.dto.request.ChangePasswordRequest;
 import com.spring.backend.module.user.user.dto.request.UpdateUserRequest;
@@ -39,7 +38,6 @@ public class UserAdminServiceImpl implements UserAdminService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
-    private final SuperAdminGuard superAdminGuard;
 
     /**
      * Returns a page of users with their roles, optionally filtered by name.
@@ -56,6 +54,16 @@ public class UserAdminServiceImpl implements UserAdminService {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
         Page<UserEntity> users = userRepository.findAllByNameContainingIgnoreCase(name, pageable);
+
+        if (name == null || name.isBlank()) {
+            users = userRepository.findAll(pageable);
+        } else {
+            users = userRepository
+                    .findAllByNameContainingIgnoreCase(
+                            name.trim(),
+                            pageable
+                    );
+        }
 
         return users.map(userMapper::toResponse);
     }
@@ -141,7 +149,6 @@ public class UserAdminServiceImpl implements UserAdminService {
         // → Force re-login everywhere; existing access tokens expire on their own
         refreshTokenService.deleteAllByUser(user);
     }
-
     /**
      * Deletes a user and revokes their refresh tokens.
      *
@@ -149,7 +156,6 @@ public class UserAdminServiceImpl implements UserAdminService {
      *
      * @param id the ID of the user to delete
      * @throws ResourceNotFoundException if the user does not exist
-     * @throws LastSuperAdminException if the user is the last SUPER_ADMIN
      */
     @Override
     @Transactional
@@ -157,19 +163,9 @@ public class UserAdminServiceImpl implements UserAdminService {
         UserEntity user = userRepository.findWithRolesById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User"));
 
-        if (superAdminGuard.isSuperAdmin(user) && superAdminGuard.isLastSuperAdmin()) {
-            throw new LastSuperAdminException();
-        }
-
         // → Access tokens are not stored server-side, so revoking refresh tokens is what stops the deleted user from renewing their session
         refreshTokenService.deleteAllByUser(user);
         userRepository.delete(user);
     }
 
-    @Override
-    @Transactional
-    public void deleteAllUsers() {
-
-        userRepository.deleteAll();
-    }
 }

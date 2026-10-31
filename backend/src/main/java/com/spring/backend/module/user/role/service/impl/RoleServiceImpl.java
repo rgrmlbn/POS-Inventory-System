@@ -3,8 +3,6 @@ package com.spring.backend.module.user.role.service.impl;
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
 import com.spring.backend.module.exception.user.role.DuplicateRoleException;
 import com.spring.backend.module.exception.user.role.RoleInUseException;
-import com.spring.backend.module.exception.user.role.RoleProtectedException;
-import com.spring.backend.module.security.permission.RoleNames;
 import com.spring.backend.module.user.permission.entity.PermissionEntity;
 import com.spring.backend.module.user.permission.repository.PermissionRepository;
 import com.spring.backend.module.user.role.dto.request.CreateRoleRequest;
@@ -27,11 +25,8 @@ import java.util.Set;
 /**
  * Implements business operations for role management.
  *
- * <p>Supports creating, retrieving, updating, and deleting roles, as well as
- * assigning permissions to roles.
- *
- * <p>The SUPER_ADMIN role is protected from modification or deletion. Access to
- * these operations is restricted to SUPER_ADMIN at the endpoint level.
+ * <p>Permissions are constants defined in code, so they cannot be created here;
+ * they can only be assigned to roles.
  */
 @Service
 @RequiredArgsConstructor
@@ -42,11 +37,6 @@ public class RoleServiceImpl implements RoleService {
     private final UserRepository userRepository;
     private final RoleMapper roleMapper;
 
-    /**
-     * Returns all roles with their mapped response details.
-     *
-     * @return a list of all roles
-     */
     @Override
     @Transactional(readOnly = true)
     public List<RoleResponse> getAllRoles() {
@@ -55,13 +45,6 @@ public class RoleServiceImpl implements RoleService {
                 .toList();
     }
 
-    /**
-     * Returns a single role by ID, including its permissions.
-     *
-     * @param id the ID of the role to retrieve
-     * @return the role's details and permissions
-     * @throws ResourceNotFoundException if the role does not exist
-     */
     @Override
     @Transactional(readOnly = true)
     public RoleResponse getRoleById(Long id) {
@@ -72,19 +55,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Creates a new role with no permissions.
+     * Creates a new role with no permissions. Permissions are assigned afterwards
+     * through {@link #setPermissions(Long, SetRolePermissionsRequest)}.
      *
-     * <p>The role name is normalized before checking for duplicates and saving.
-     * Permissions are assigned separately through {@link #setPermissions(Long, SetRolePermissionsRequest)}.
-     *
-     * @param request the role name and description
-     * @return the newly created role's details
      * @throws DuplicateRoleException if a role with the same name already exists
      */
     @Override
     @Transactional
     public RoleResponse createRole(CreateRoleRequest request) {
-        String name = request.getName().trim().toUpperCase().replace(' ', '_');
+        String name = normalize(request.getName());
 
         if (roleRepository.existsByName(name)) {
             throw new DuplicateRoleException();
@@ -97,16 +76,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Updates a role's name and/or description.
+     * Updates a role's name and/or description. Null or blank names are left unchanged.
      *
-     * <p>Null or blank names are left unchanged. The SUPER_ADMIN role cannot be
-     * renamed, and duplicate names are rejected.
-     *
-     * @param id the ID of the role to update
-     * @param request the fields to update
-     * @return the updated role's details
      * @throws ResourceNotFoundException if the role does not exist
-     * @throws RoleProtectedException if an attempt is made to rename SUPER_ADMIN
      * @throws DuplicateRoleException if the requested name is already in use
      */
     @Override
@@ -116,18 +88,12 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
         if (request.getName() != null && !request.getName().isBlank()) {
-            String name = request.getName().trim().toUpperCase().replace(' ', '_');
+            String name = normalize(request.getName());
 
             if (!name.equals(role.getName())) {
-                // → Preserve the SUPER_ADMIN name to protect built-in security rules.
-                if (RoleNames.SUPER_ADMIN.equals(role.getName())) {
-                    throw new RoleProtectedException();
-                }
-
                 if (roleRepository.existsByName(name)) {
                     throw new DuplicateRoleException();
                 }
-
                 role.setName(name);
             }
         }
@@ -142,49 +108,31 @@ public class RoleServiceImpl implements RoleService {
     /**
      * Replaces the permissions assigned to a role.
      *
-     * <p>The SUPER_ADMIN role cannot have its permissions replaced, ensuring
-     * that the system retains its highest-privilege role.
-     *
-     * @param id the ID of the role whose permissions will be replaced
-     * @param request the requested permission names
-     * @return the updated role's details
      * @throws ResourceNotFoundException if the role or any requested permission does not exist
-     * @throws RoleProtectedException if the role is SUPER_ADMIN
      */
     @Override
     @Transactional
     public RoleResponse setPermissions(Long id, SetRolePermissionsRequest request) {
-        // → Find the role.
         RoleEntity role = roleRepository.findWithPermissionsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
-        // → SUPER_ADMIN's permissions can never be changed.
-        if (RoleNames.SUPER_ADMIN.equals(role.getName())) {
-            throw new RoleProtectedException();
-        }
-
         Set<String> requestedNames = request.getPermissions();
-
-        // → Fetch all requested permissions from the database in one query.
-        List<PermissionEntity> foundPermissions = permissionRepository.findByNameIn(requestedNames);
+        List<PermissionEntity> found = permissionRepository.findByNameIn(requestedNames);
 
         // → If we found fewer than requested, some names don't exist.
-        if (foundPermissions.size() != requestedNames.size()) {
+        if (found.size() != requestedNames.size()) {
             throw new ResourceNotFoundException("Permission");
         }
 
-        // → Replace the role's permissions and save.
-        role.setPermissions(new HashSet<>(foundPermissions));
+        role.setPermissions(new HashSet<>(found));
 
         return roleMapper.toResponse(roleRepository.save(role));
     }
 
     /**
-     * Deletes a role if it is neither protected nor assigned to any user.
+     * Deletes a role that is not assigned to any user.
      *
-     * @param id the ID of the role to delete
      * @throws ResourceNotFoundException if the role does not exist
-     * @throws RoleProtectedException if the role is SUPER_ADMIN
      * @throws RoleInUseException if the role is assigned to one or more users
      */
     @Override
@@ -193,16 +141,14 @@ public class RoleServiceImpl implements RoleService {
         RoleEntity role = roleRepository.findWithPermissionsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role"));
 
-        // → SUPER_ADMIN is required for the application's built-in security rules.
-        if (RoleNames.SUPER_ADMIN.equals(role.getName())) {
-            throw new RoleProtectedException();
-        }
-
-        // → Prevent deleting a role that is still assigned to users.
         if (userRepository.existsByRolesId(id)) {
             throw new RoleInUseException();
         }
 
         roleRepository.delete(role);
+    }
+
+    private String normalize(String name) {
+        return name.trim().toUpperCase().replace(' ', '_');
     }
 }

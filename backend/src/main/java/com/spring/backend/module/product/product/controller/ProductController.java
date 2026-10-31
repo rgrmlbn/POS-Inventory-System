@@ -1,15 +1,12 @@
 package com.spring.backend.module.product.product.controller;
 
-import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
-import com.spring.backend.module.security.permission.Perm;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,26 +22,26 @@ public class ProductController {
 
     private final ProductService productService;
 
-
     @GetMapping
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
             @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size){
+            @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(productService.getAllProducts(productName, page, size));
     }
 
     @GetMapping("/{productId}")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public ResponseEntity<ProductResponse> getProductById(
-            @PathVariable @Positive Long productId){
+            @PathVariable @Positive Long productId) {
 
         return ResponseEntity.ok(productService.getProductById(productId));
     }
 
     @GetMapping("/sku")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public ResponseEntity<Page<ProductResponse>> getProductBySku(
             @RequestParam(required = false) String sku,
             @RequestParam(defaultValue = "0") int page,
@@ -54,37 +51,37 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryId}")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_READ + "')")
-    public ResponseEntity<Page<ProductResponse>>getAllProductsByCategoryId(
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
+    public ResponseEntity<Page<ProductResponse>> getAllProductsByCategoryId(
             @PathVariable @Positive Long categoryId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size){
+            @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(productService.getAllProductsByCategoryId(categoryId, page, size));
-
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_CREATE + "')")
+    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
     public ResponseEntity<ProductResponse> createProduct(
-          @RequestBody @Valid ProductCreateRequest request){
+            @RequestBody @Valid ProductCreateRequest request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productService.createProduct(request));
     }
 
     @PatchMapping("/{productId}/update")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_UPDATE + "')")
+    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable @Positive Long productId,
-            @RequestBody @Valid ProductUpdateRequest update){
+            @RequestBody @Valid ProductUpdateRequest update) {
 
         return ResponseEntity.ok(productService.updateProduct(productId, update));
     }
 
     @DeleteMapping("/{productId}/delete")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_DELETE + "')")
+    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
     public ResponseEntity<Void> deleteProductById(
-            @PathVariable @Positive Long productId){
+            @PathVariable @Positive Long productId) {
 
         productService.deleteProductById(productId);
 
@@ -92,8 +89,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete-all")
-    @PreAuthorize("hasAuthority('" + Perm.PRODUCT_DELETE + "')")
-    public ResponseEntity<Void> deleteAllProducts(){
+    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
+    public ResponseEntity<Void> deleteAllProducts() {
 
         productService.deleteAllProducts();
 

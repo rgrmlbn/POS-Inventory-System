@@ -39,11 +39,4 @@ public class UserMapper {
                 .build();
     }
 
-    public RegisterResponse toRegisterResponse(UserEntity user) {
-        return RegisterResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
-    }
 }

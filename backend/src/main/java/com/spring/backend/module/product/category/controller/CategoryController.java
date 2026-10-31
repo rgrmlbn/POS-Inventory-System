@@ -4,7 +4,6 @@ import com.spring.backend.module.product.category.dto.request.CategoryCreateRequ
 import com.spring.backend.module.product.category.dto.request.CategoryUpdateRequest;
 import com.spring.backend.module.product.category.dto.response.CategoryResponse;
 import com.spring.backend.module.product.category.service.interfaces.CategoryService;
-import com.spring.backend.module.security.permission.Perm;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_READ + "')")
+    @PreAuthorize("hasAuthority('CATEGORY_READ')")
     public ResponseEntity<Page<CategoryResponse>> getAllCategories(
             @RequestParam(required = false) String categoryName,
             @RequestParam(defaultValue = "0") int page,
@@ -36,39 +35,47 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_READ + "')")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable @Positive Long id) {
+    @PreAuthorize("hasAuthority('CATEGORY_READ')")
+    public ResponseEntity<CategoryResponse> getCategoryById(
+            @PathVariable @Positive Long id) {
 
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_CREATE + "')")
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest request) {
+    @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
+    public ResponseEntity<CategoryResponse> createCategory(
+            @RequestBody @Valid CategoryCreateRequest request) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoryService.createCategory(request));
     }
 
     @PatchMapping("/{id}/update")
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_UPDATE + "')")
-    public ResponseEntity<CategoryResponse> updateCategoryById(@PathVariable @Positive Long id, @RequestBody @Valid CategoryUpdateRequest update) {
+    @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
+    public ResponseEntity<CategoryResponse> updateCategoryById(
+            @PathVariable @Positive Long id,
+            @RequestBody @Valid CategoryUpdateRequest update) {
 
         return ResponseEntity.ok(categoryService.updateCategoryById(id, update));
     }
 
     @DeleteMapping("/{id}/delete")
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_DELETE + "')")
-    public ResponseEntity<Void> deleteCategoryById(@PathVariable @Positive Long id) {
+    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
+    public ResponseEntity<Void> deleteCategoryById(
+            @PathVariable @Positive Long id) {
 
         categoryService.deleteCategoryById(id);
+
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete-all")
-    @PreAuthorize("hasAuthority('" + Perm.CATEGORY_DELETE + "')")
+    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
     public ResponseEntity<Void> deleteAllCategories() {
 
         categoryService.deleteAllCategories();
+
         return ResponseEntity.noContent().build();
     }
 }

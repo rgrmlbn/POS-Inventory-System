@@ -1,12 +1,12 @@
 package com.spring.backend.module.user.auth.controller;
 
-import com.spring.backend.module.security.permission.Perm;
 import com.spring.backend.module.user.auth.dto.request.LoginRequest;
 import com.spring.backend.module.user.auth.dto.request.RefreshTokenRequest;
 import com.spring.backend.module.user.auth.dto.request.RegisterRequest;
 import com.spring.backend.module.user.auth.dto.response.AuthResponse;
 import com.spring.backend.module.user.auth.dto.response.RegisterResponse;
 import com.spring.backend.module.user.auth.service.interfaces.AuthService;
+import com.spring.backend.module.user.user.dto.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class AuthController {
      * @return 201 with the created account, or 409 if the email is already registered
      */
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
     }
 

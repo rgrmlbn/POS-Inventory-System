@@ -1,6 +1,5 @@
 package com.spring.backend.module.user.role.controller;
 
-import com.spring.backend.module.security.permission.Perm;
 import com.spring.backend.module.user.role.dto.request.CreateRoleRequest;
 import com.spring.backend.module.user.role.dto.request.SetRolePermissionsRequest;
 import com.spring.backend.module.user.role.dto.request.UpdateRoleRequest;
@@ -40,7 +39,7 @@ public class RoleController {
      * @return 200 with every role
      */
     @GetMapping
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_READ + "')")
+    @PreAuthorize("hasAuthority('ROLE_READ')")
     public ResponseEntity<List<RoleResponse>> getAllRoles() {
         return ResponseEntity.ok(roleService.getAllRoles());
     }
@@ -54,8 +53,10 @@ public class RoleController {
      * @return 200 with the role, or 404 if not found
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_READ + "')")
-    public ResponseEntity<RoleResponse> getRoleById(@PathVariable @Positive Long id) {
+    @PreAuthorize("hasAuthority('ROLE_READ')")
+    public ResponseEntity<RoleResponse> getRoleById(
+            @PathVariable @Positive Long id) {
+
         return ResponseEntity.ok(roleService.getRoleById(id));
     }
 
@@ -67,13 +68,16 @@ public class RoleController {
      *
      * @param request the role name, description, and optional permissions
      * @return 201 with the created role, 403 if granting permissions would escalate
-     *         privileges, 404 if a requested permission is not found,
-     *         or 409 if the role name already exists
+     * privileges, 404 if a requested permission is not found,
+     * or 409 if the role name already exists
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_CREATE + "')")
-    public ResponseEntity<RoleResponse> createRole(@RequestBody @Valid CreateRoleRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(request));
+    @PreAuthorize("hasAuthority('ROLE_CREATE')")
+    public ResponseEntity<RoleResponse> createRole(
+            @RequestBody @Valid CreateRoleRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(roleService.createRole(request));
     }
 
     /**
@@ -84,13 +88,14 @@ public class RoleController {
      * @param id the ID of the role to update
      * @param request the fields to change
      * @return 200 with the updated role, 404 if not found, or 409 if the role
-     *         is protected or the requested name is already taken
+     * is protected or the requested name is already taken
      */
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_UPDATE + "')")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ResponseEntity<RoleResponse> updateRole(
             @PathVariable @Positive Long id,
             @RequestBody @Valid UpdateRoleRequest request) {
+
         return ResponseEntity.ok(roleService.updateRole(id, request));
     }
 
@@ -104,14 +109,15 @@ public class RoleController {
      * @param id the ID of the role whose permissions will be replaced
      * @param request the permission names to assign to the role
      * @return 200 with the updated role, 403 if granting permissions would escalate
-     *         privileges, 404 if the role or a requested permission is not found,
-     *         or 409 if the role is protected
+     * privileges, 404 if the role or a requested permission is not found,
+     * or 409 if the role is protected
      */
     @PutMapping("/{id}/permissions")
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_UPDATE + "')")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ResponseEntity<RoleResponse> setPermissions(
             @PathVariable @Positive Long id,
             @RequestBody @Valid SetRolePermissionsRequest request) {
+
         return ResponseEntity.ok(roleService.setPermissions(id, request));
     }
 
@@ -122,12 +128,15 @@ public class RoleController {
      *
      * @param id the ID of the role to delete
      * @return 204 on success, 404 if the role is not found, or 409 if the role
-     *         is protected or still assigned to one or more users
+     * is protected or still assigned to one or more users
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('" + Perm.ROLE_DELETE + "')")
-    public ResponseEntity<Void> deleteRole(@PathVariable @Positive Long id) {
+    @PreAuthorize("hasAuthority('ROLE_DELETE')")
+    public ResponseEntity<Void> deleteRole(
+            @PathVariable @Positive Long id) {
+
         roleService.deleteRole(id);
+
         return ResponseEntity.noContent().build();
     }
 }
