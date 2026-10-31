@@ -56,6 +56,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "product", key = "#productId")
     public ProductResponse getProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)
@@ -78,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "product", key = "#productId")
+    @Cacheable("productPagesCategory")
     public Page<ProductResponse> getAllProductsByCategoryId(Long categoryId, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);

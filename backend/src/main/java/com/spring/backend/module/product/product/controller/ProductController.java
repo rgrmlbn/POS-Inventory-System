@@ -23,7 +23,6 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
             @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,

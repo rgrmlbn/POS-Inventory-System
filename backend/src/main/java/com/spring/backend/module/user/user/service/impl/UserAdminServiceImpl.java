@@ -20,6 +20,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 
 /**
  * Implements administrative operations on user accounts.
@@ -49,6 +53,7 @@ public class UserAdminServiceImpl implements UserAdminService {
      */
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("userPagesAll")
     public Page<UserResponse> getAllUsers(String name, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -77,6 +82,7 @@ public class UserAdminServiceImpl implements UserAdminService {
      */
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "user", key = "#id")
     public UserResponse getUserById(Long id) {
 
         UserEntity user = userRepository.findWithRolesById(id)
@@ -96,6 +102,10 @@ public class UserAdminServiceImpl implements UserAdminService {
      */
     @Override
     @Transactional
+    @Caching(
+            put = @CachePut(value = "user", key = "#id"),
+            evict = @CacheEvict(value = "userPagesAll", allEntries = true)
+    )
     public UserResponse updateUserById(Long id, UpdateUserRequest update) {
         UserEntity user = userRepository.findWithRolesById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User"));
@@ -129,6 +139,10 @@ public class UserAdminServiceImpl implements UserAdminService {
      */
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#id"),
+            @CacheEvict(value = "userPagesAll", allEntries = true)
+    })
     public void changePasswordById(Long id, ChangePasswordRequest request) {
         UserEntity user = userRepository.findWithRolesById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User"));
