@@ -4,6 +4,7 @@ import com.spring.backend.module.exception.common.ResourceNotFoundException;
 import com.spring.backend.module.exception.products.products.DuplicateProductException;
 import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.category.repository.CategoryRepository;
+import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
@@ -28,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
+    private final InventoryService inventoryService;
 
     @Override
     @Transactional(readOnly = true)
@@ -98,6 +100,8 @@ public class ProductServiceImpl implements ProductService {
 
         ProductEntity savedProduct = productRepository.save(product);
 
+        inventoryService.createInventory(savedProduct);
+
         return productMapper.toResponse(savedProduct);
     }
 
@@ -126,7 +130,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "product", key = "#productId")
+    @Caching(evict = {
+            @CacheEvict(value = "product", key = "#productId"),
+            @CacheEvict(value = "inventory", key = "#productId")
+    })
     public void deleteProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)

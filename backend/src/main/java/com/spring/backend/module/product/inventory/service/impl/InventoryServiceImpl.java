@@ -1,19 +1,18 @@
 package com.spring.backend.module.product.inventory.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
-import com.spring.backend.module.product.inventory.dto.request.StockAdjustmentRequest;
+
+import com.spring.backend.module.product.inventory.dto.request.InventoryUpdateRequest;
 import com.spring.backend.module.product.inventory.dto.response.InventoryResponse;
-import com.spring.backend.module.product.inventory.dto.response.StockMovementResponse;
 import com.spring.backend.module.product.inventory.entity.InventoryEntity;
 import com.spring.backend.module.product.inventory.mapper.InventoryMapper;
 import com.spring.backend.module.product.inventory.repository.InventoryRepository;
-import com.spring.backend.module.product.inventory.repository.StockMovementRepository;
 import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
 import com.spring.backend.module.product.product.entity.ProductEntity;
-import com.spring.backend.module.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
-    private final StockMovementRepository stockMovementRepository;
     private final InventoryMapper inventoryMapper;
 
 
@@ -52,24 +50,19 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional
-    public InventoryResponse createInventory(InventoryCreateRequest request) {
+    public void createInventory(ProductEntity product) {
 
-        ProductEntity product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+        InventoryEntity inventory = InventoryEntity.builder()
+                .product(product)
+                .productQuantity(0)
+                .build();
 
-        if (inventoryRepository.existsByProductId(request.getProductId())) {
-            throw new DuplicateInventoryException();   // or your own exception
-        }
-
-        InventoryEntity inventory = inventoryMapper.toEntity(request, product);
-        InventoryEntity saved = inventoryRepository.save(inventory);
-
-        // optional: write the "Initial stock" StockMovementEntity here if quantity > 0
-
-        return inventoryMapper.toResponse(saved);
+        inventoryRepository.save(inventory);
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "inventory", key = "#productId")
     public InventoryResponse getInventoryByProductId(Long productId) {
 
         InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
@@ -79,12 +72,13 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public InventoryResponse adjustStock(Long productId, StockAdjustmentRequest request) {
-        return null;
-    }
+    @Transactional
+    @CacheEvict(value = "inventory", key = "#productId")
+    public InventoryResponse updateProductInventory(Long productId, InventoryUpdateRequest request) {
+        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
-    @Override
-    public Page<StockMovementResponse> getStockMovements(Long productId, int page, int size) {
-        return null;
+        inventory.setProductQuantity(request.getQuantity());
+        return inventoryMapper.toResponse(inventoryRepository.save(inventory));
     }
 }

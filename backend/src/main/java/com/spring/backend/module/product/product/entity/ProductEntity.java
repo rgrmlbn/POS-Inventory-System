@@ -38,4 +38,6 @@ public class ProductEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Integer reorderLevel;
+
+
 }
