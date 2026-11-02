@@ -49,18 +49,6 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    @Transactional
-    public void createInventory(ProductEntity product) {
-
-        InventoryEntity inventory = InventoryEntity.builder()
-                .product(product)
-                .productQuantity(0)
-                .build();
-
-        inventoryRepository.save(inventory);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "inventory", key = "#productId")
     public InventoryResponse getInventoryByProductId(Long productId) {
@@ -80,5 +68,42 @@ public class InventoryServiceImpl implements InventoryService {
 
         inventory.setProductQuantity(request.getQuantity());
         return inventoryMapper.toResponse(inventoryRepository.save(inventory));
+    }
+
+    @Override
+    @Transactional
+    public void createInventory(ProductEntity product) {
+
+        InventoryEntity inventory = InventoryEntity.builder()
+                .product(product)
+                .productQuantity(0)
+                .build();
+
+        inventoryRepository.save(inventory);
+    }
+
+    @Override
+    public void increaseStock(Long productId, int productQuantity) {
+
+        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+
+        inventory.setProductQuantity(inventory.getProductQuantity() + productQuantity);
+        inventoryRepository.save(inventory);
+    }
+
+    @Override
+    public void decreaseStock(Long productId, int productQuantity) {
+
+        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+
+        if(inventory.getProductQuantity() < productQuantity) {
+            throw new IllegalArgumentException("Insufficient stock for product ID: " + productId);
+        }
+
+        inventory.setProductQuantity(inventory.getProductQuantity() - productQuantity);
+        inventoryRepository.save(inventory);
+
     }
 }

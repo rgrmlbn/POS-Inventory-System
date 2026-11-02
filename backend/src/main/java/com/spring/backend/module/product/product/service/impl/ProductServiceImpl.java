@@ -90,7 +90,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = {"productPagesAll", "productPagesSku", "productPagesCategory"}, allEntries = true)
     public ProductResponse createProduct(ProductCreateRequest request) {
 
         CategoryEntity category = categoryRepository.findById(request.getCategoryId())
@@ -123,6 +122,33 @@ public class ProductServiceImpl implements ProductService {
                 throw new DuplicateProductException();
             }
             product.setSku(update.getSku());
+        }
+
+        if(update.getBarcode() != null && !update.getBarcode().isBlank()) {
+            if(!product.getBarcode().equals(update.getBarcode())
+                    && productRepository.existsByBarcode(update.getBarcode())) {
+                throw new DuplicateProductException();
+            }
+            product.setBarcode(update.getBarcode());
+        }
+
+        CategoryEntity category = categoryRepository.findById(update.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category"));
+
+        if(update.getCategoryId() != null) {
+            product.setCategory(category);
+        }
+
+        if(update.getCostPrice() != null) {
+            product.setCostPrice(update.getCostPrice());
+        }
+
+        if(update.getSellingPrice()!= null) {
+            product.setSellingPrice(update.getSellingPrice());
+        }
+
+        if(update.getReorderLevel()!= null) {
+            product.setReorderLevel(update.getReorderLevel());
         }
 
         return productMapper.toResponse(productRepository.save(product));

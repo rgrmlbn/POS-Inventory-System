@@ -29,4 +29,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     Optional<ProductEntity> findProductById(Long productId);
 
     boolean existsBySku(String sku);
+
+    boolean existsByBarcode(String barcode);
 }

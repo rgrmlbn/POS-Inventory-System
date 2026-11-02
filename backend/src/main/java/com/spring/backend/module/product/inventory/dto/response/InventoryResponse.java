@@ -1,10 +1,14 @@
 package com.spring.backend.module.product.inventory.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InventoryResponse {
 
     private Long id;

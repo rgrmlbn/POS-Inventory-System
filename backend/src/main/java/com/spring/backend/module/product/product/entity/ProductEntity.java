@@ -31,10 +31,10 @@ public class ProductEntity extends BaseEntity {
     private CategoryEntity category;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal costPrice;
+    private Double costPrice;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal sellingPrice;
+    private Double sellingPrice;
 
     @Column(nullable = false)
     private Integer reorderLevel;

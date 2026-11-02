@@ -19,7 +19,7 @@ public class ProductResponse {
     private String sku;
     private String barcode;
     private String categoryName;
-    private BigDecimal costPrice;
-    private BigDecimal sellingPrice;
+    private Double costPrice;
+    private Double sellingPrice;
     private Integer reorderLevel;
 }

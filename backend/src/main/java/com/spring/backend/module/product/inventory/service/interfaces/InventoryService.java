@@ -14,4 +14,8 @@ public interface InventoryService {
     InventoryResponse getInventoryByProductId(Long productId);
 
     InventoryResponse updateProductInventory(Long productId, InventoryUpdateRequest request);
+
+    void increaseStock(Long productId, int productQuantity);   // used by purchase
+    void decreaseStock(Long productId, int productQuantity);   // used by sale, throws if quantity > stock
+
 }

@@ -20,6 +20,4 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
     @EntityGraph(attributePaths = {"product", "product.category"})
     Optional<InventoryEntity> findInventoryByProductId(Long productId);
 
-    boolean existsByProductId(Long productId);
-
 }

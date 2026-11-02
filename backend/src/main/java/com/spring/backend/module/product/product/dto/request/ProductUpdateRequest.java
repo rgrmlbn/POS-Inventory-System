@@ -27,10 +27,10 @@ public class ProductUpdateRequest {
     private Long categoryId;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "Cost price cannot be negative")
-    private BigDecimal costPrice;
+    private Double costPrice;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "Selling price cannot be negative")
-    private BigDecimal sellingPrice;
+    private Double sellingPrice;
 
     @Min(value = 0, message = "Reorder level cannot be negative")
     private Integer reorderLevel;

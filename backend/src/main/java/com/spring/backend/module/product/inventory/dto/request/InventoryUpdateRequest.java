@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InventoryUpdateRequest {
 
-    private Long productId;
-
     @Min(value = 0, message = "Quantity cannot be negative")
     private Integer quantity;
 }

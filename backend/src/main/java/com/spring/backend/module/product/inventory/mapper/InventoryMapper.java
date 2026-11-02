@@ -1,6 +1,5 @@
 package com.spring.backend.module.product.inventory.mapper;
 
-import com.spring.backend.module.product.inventory.dto.request.InventoryCreateRequest;
 import com.spring.backend.module.product.inventory.dto.response.InventoryResponse;
 import com.spring.backend.module.product.inventory.entity.InventoryEntity;
 import org.springframework.stereotype.Component;
