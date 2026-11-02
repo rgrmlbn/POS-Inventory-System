@@ -8,7 +8,7 @@ public interface PurchaseService {
 
     Page<PurchaseResponse> getAllPurchase(String productName, int page, int size);
 
-    PurchaseResponse getPurchaseById(Long id);
+    PurchaseResponse getPurchaseByProductId(Long id);
 
     PurchaseResponse createPurchase(PurchaseCreateRequest request);
 }

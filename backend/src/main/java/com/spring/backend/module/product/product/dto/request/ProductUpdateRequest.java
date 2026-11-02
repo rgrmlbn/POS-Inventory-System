@@ -26,10 +26,9 @@ public class ProductUpdateRequest {
     @Min(value = 1, message = "Category ID must be greater than 0")
     private Long categoryId;
 
-    @DecimalMin(value = "0.0", inclusive = true, message = "Cost price cannot be negative")
     private Double costPrice;
 
-    @DecimalMin(value = "0.0", inclusive = true, message = "Selling price cannot be negative")
+
     private Double sellingPrice;
 
     @Min(value = 0, message = "Reorder level cannot be negative")

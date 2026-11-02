@@ -35,11 +35,9 @@ public class ProductCreateRequest {
     private Long categoryId;
 
     @NotNull(message = "Cost price is required")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Cost price cannot be negative")
     private Double costPrice;
 
     @NotNull(message = "Selling price is required")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Selling price cannot be negative")
     private Double sellingPrice;
 
     @NotNull(message = "Reorder level is required")

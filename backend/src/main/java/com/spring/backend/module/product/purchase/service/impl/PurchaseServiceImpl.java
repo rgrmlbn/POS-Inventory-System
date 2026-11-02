@@ -21,10 +21,10 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class PurchaseServiceImpl implements PurchaseService {
 
-    PurchaseRepository purchaseRepository;
-    ProductRepository productRepository;
-    PurchaseMapper purchaseMapper;
-    InventoryService inventoryService;
+    private final PurchaseRepository purchaseRepository;
+    private final  ProductRepository productRepository;
+    private final  PurchaseMapper purchaseMapper;
+    private final  InventoryService inventoryService;
 
     @Override
     public Page<PurchaseResponse> getAllPurchase(String productName, int page, int size) {
@@ -46,7 +46,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public PurchaseResponse getPurchaseById(Long productId) {
+    public PurchaseResponse getPurchaseByProductId(Long productId) {
 
         PurchaseEntity purchase = purchaseRepository.findPurchaseByProductId(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Purchase"));

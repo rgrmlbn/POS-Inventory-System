@@ -23,10 +23,10 @@ public class PurchaseEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer purchaseQuantity;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private Double unitCost;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(nullable = false)
     private Double totalCost;   // purchaseQuantity * unitCost, set by the service
 
     @Column(nullable = false)
