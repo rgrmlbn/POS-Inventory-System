@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 
 @Getter
 @NoArgsConstructor
@@ -35,10 +37,10 @@ public class ProductCreateRequest {
     private Long categoryId;
 
     @NotNull(message = "Cost price is required")
-    private Double costPrice;
+    private BigDecimal costPrice;
 
     @NotNull(message = "Selling price is required")
-    private Double sellingPrice;
+    private BigDecimal sellingPrice;
 
     @NotNull(message = "Reorder level is required")
     @Min(value = 0, message = "Reorder level cannot be negative")

@@ -16,8 +16,8 @@ public class PurchaseResponse {
     private Long id;
     private String productName;
     private Integer purchaseQuantity;
-    private Double unitCost;
-    private Double totalCost;   // purchaseQuantity * unitCost, set by the service
+    private BigDecimal unitCost;
+    private BigDecimal totalCost;   // purchaseQuantity * unitCost, set by the service
     private String supplierName;
     private String note;
 }

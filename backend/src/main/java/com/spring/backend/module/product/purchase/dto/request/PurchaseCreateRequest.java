@@ -22,10 +22,10 @@ public class PurchaseCreateRequest {
     private Integer purchaseQuantity;
 
     @NotNull(message = "Unit Cost is required.")
-    private Double unitCost;
+    private BigDecimal unitCost;
 
     @NotBlank(message = "Supplier Name quantity is required.")
-    private String supplierName;
+    private BigDecimal supplierName;
 
     private String note;
 

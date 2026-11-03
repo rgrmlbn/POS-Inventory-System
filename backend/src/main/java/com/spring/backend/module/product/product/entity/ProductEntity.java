@@ -30,11 +30,11 @@ public class ProductEntity extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
 
-    @Column(nullable = false)
-    private Double costPrice;
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal costPrice;
 
-    @Column(nullable = false)
-    private Double sellingPrice;
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal sellingPrice;
 
     @Column(nullable = false)
     private Integer reorderLevel;

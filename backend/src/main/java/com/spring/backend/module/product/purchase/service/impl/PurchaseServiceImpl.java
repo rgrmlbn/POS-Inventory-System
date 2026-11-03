@@ -64,7 +64,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         PurchaseEntity purchase = purchaseMapper.toEntity(request, product);
 
-        purchase.setTotalCost(purchase.getUnitCost() * purchase.getPurchaseQuantity());   // set total cost
+        purchase.setTotalCost(
+                purchase.getUnitCost().multiply(
+                        BigDecimal.valueOf(purchase.getPurchaseQuantity())
+                )
+        ); // set total cost
 
         PurchaseEntity savedPurchase = purchaseRepository.save(purchase);
 
