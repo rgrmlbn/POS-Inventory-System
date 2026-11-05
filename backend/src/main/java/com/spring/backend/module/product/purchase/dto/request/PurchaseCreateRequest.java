@@ -1,5 +1,6 @@
 package com.spring.backend.module.product.purchase.dto.request;
 
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class PurchaseCreateRequest {
     private BigDecimal unitCost;
 
     @NotBlank(message = "Supplier Name quantity is required.")
-    private BigDecimal supplierName;
+    private String supplierName;
 
     private String note;
 

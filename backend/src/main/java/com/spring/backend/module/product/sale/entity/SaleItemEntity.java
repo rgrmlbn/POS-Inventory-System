@@ -1,6 +1,7 @@
 package com.spring.backend.module.product.sale.entity;
 
 import com.spring.backend.module.product.product.entity.ProductEntity;
+import com.spring.backend.module.shared.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaleItemEntity {
+public class SaleItemEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sale_id", nullable = false)
