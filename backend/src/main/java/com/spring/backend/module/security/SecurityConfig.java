@@ -85,7 +85,9 @@ public class SecurityConfig {
                                 "/h2-console/**",
 
                                 // -> Public product endpoints
-                                "/api/v1/products"
+                                "/api/v1/products",
+                                "/api/v1/products/productName",
+                                "/api/v1/products/{productId}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -2,6 +2,7 @@
 package com.spring.backend.module.product.product.entity;
 
 import com.spring.backend.module.product.category.entity.CategoryEntity;
+import com.spring.backend.module.product.inventory.entity.InventoryEntity;
 import com.spring.backend.module.shared.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,5 +40,6 @@ public class ProductEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer reorderLevel;
 
-
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    private InventoryEntity inventory;
 }

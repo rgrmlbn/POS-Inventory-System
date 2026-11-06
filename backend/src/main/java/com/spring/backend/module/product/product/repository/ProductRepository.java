@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
-    @EntityGraph(attributePaths = {"category"})
+    @EntityGraph(attributePaths = {"category", "inventory"})
     Page<ProductEntity> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"category"})
@@ -25,7 +25,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @EntityGraph(attributePaths = {"category"})
     Page<ProductEntity> findAllBySkuContainingIgnoreCase(String sku, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"category"})
+    @EntityGraph(attributePaths = {"category", "inventory"})
     Optional<ProductEntity> findProductById(Long productId);
 
     boolean existsBySku(String sku);

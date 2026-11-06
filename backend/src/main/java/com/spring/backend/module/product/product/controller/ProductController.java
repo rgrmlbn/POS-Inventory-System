@@ -2,6 +2,7 @@ package com.spring.backend.module.product.product.controller;
 
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
+import com.spring.backend.module.product.product.dto.response.ProductDetailedResponse;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
 import jakarta.validation.Valid;
@@ -24,16 +25,24 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
-            @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(productService.getAllProducts(productName, page, size));
+        return ResponseEntity.ok(productService.getAllProducts(page, size));
+    }
+
+    @GetMapping("/productName")
+    public ResponseEntity<Page<ProductResponse>> getAllProductsByName(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(productService.getAllProductsByProductName(search, page, size));
     }
 
     @GetMapping("/{productId}")
-    @PreAuthorize("hasAuthority('PRODUCT_READ')")
-    public ResponseEntity<ProductResponse> getProductById(
+//    @PreAuthorize("hasAuthority('PRODUCT_READ')")
+    public ResponseEntity<ProductDetailedResponse> getProductById(
             @PathVariable @Positive Long productId) {
 
         return ResponseEntity.ok(productService.getProductById(productId));

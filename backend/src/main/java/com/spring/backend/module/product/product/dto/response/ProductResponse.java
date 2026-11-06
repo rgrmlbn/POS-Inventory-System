@@ -16,10 +16,7 @@ public class ProductResponse {
 
     private Long id;
     private String productName;
-    private String sku;
-    private String barcode;
     private String categoryName;
-    private BigDecimal costPrice;
     private BigDecimal sellingPrice;
-    private Integer reorderLevel;
+    private Integer availableQuantity;
 }

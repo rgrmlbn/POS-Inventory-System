@@ -7,6 +7,7 @@ import com.spring.backend.module.product.category.repository.CategoryRepository;
 import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
+import com.spring.backend.module.product.product.dto.response.ProductDetailedResponse;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
 import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.mapper.ProductMapper;
@@ -32,8 +33,18 @@ public class ProductServiceImpl implements ProductService {
     private final InventoryService inventoryService;
 
     @Override
+    public Page<ProductResponse> getAllProducts(int page, int size) {
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<ProductEntity> products = productRepository.findAll(pageable);
+
+        return products.map(ProductEntity -> productMapper.toResponse(ProductEntity));
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public Page<ProductResponse> getAllProducts(
+    public Page<ProductResponse> getAllProductsByProductName(
             String productName,
             int page,
             int size) {
@@ -52,18 +63,18 @@ public class ProductServiceImpl implements ProductService {
                     );
         }
 
-        return products.map(productMapper::toResponse);
+        return products.map(ProductEntity -> productMapper.toResponse(ProductEntity));
     }
 
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "product", key = "#productId")
-    public ProductResponse getProductById(Long productId) {
+    public ProductDetailedResponse getProductById(Long productId) {
 
         ProductEntity product = productRepository.findProductById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
-        return productMapper.toResponse(product);
+        return productMapper.toDetailedResponse(product);
     }
 
     @Override
