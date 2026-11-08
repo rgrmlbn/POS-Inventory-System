@@ -1,37 +1,40 @@
-import { useForm } from "react-hook-form";
-
-interface SearchForm {
-    productName: string;
-}
+import { useState } from "react";
 
 interface ProductSearchFormProps {
-    onSearch: (productName: string) => void;
-    onClear: () => void;
+  onSearch: (productName: string) => void;
+  onClear: () => void;
 }
 
-export function ProductSearchForm({ onSearch, onClear }: ProductSearchFormProps) {
-    const { register, handleSubmit, reset } = useForm<SearchForm>({
-        defaultValues: { productName: "" },
-    });
+export function ProductSearchForm({
+  onSearch,
+  onClear,
+}: ProductSearchFormProps) {
+  const [productName, setProductName] = useState("");
 
-    const submit = (data: SearchForm) => {
-        onSearch(data.productName.trim());
-    };
-
-    const clear = () => {
-        reset();
-        onClear();
-    };
-
-    return (
-        <form onSubmit={handleSubmit(submit)} role="search">
-            <input
-                type="text" // search if you want to use the browser's built-in search features "x" button.
-                placeholder="Search by product name..."
-                {...register("productName")}
-            />
-            <button type="submit">Search</button>
-            <button type="button" onClick={clear}>Clear</button>
-        </form>
-    );
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSearch(productName.trim());
+      }}
+      role="search"
+    >
+      <input
+        type="text" // use "search" if you want the browser's built-in "x" clear button
+        placeholder="Search by product name..."
+        value={productName}
+        onChange={(event) => setProductName(event.target.value)}
+      />
+      <button type="submit">Search</button>
+      <button
+        type="button"
+        onClick={() => {
+          setProductName("");
+          onClear();
+        }}
+      >
+        Clear
+      </button>
+    </form>
+  );
 }

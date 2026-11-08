@@ -33,7 +33,7 @@ export function Pagination({
 
             <select
                 value={size}
-                onChange={e => onSizeChange(Number(e.target.value))}
+                onChange={event => onSizeChange(Number(event.target.value))}
             >
                 <option value={5}>5 per page</option>
                 <option value={10}>10 per page</option>
