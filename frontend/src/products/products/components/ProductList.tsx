@@ -1,4 +1,4 @@
-import type { Product } from "../types";
+import type { Product } from "../types/Product";
 import { Link } from "react-router-dom";
 
 interface ProductListProps {
@@ -26,6 +26,7 @@ export function ProductList({ products, loading, error }: ProductListProps) {
             <li>Selling Price: {product.sellingPrice}</li>
             <li>Available Quantity: {product.availableQuantity}</li>
           </ul>
+          <button>Add to Cart</button>
           <Link to={`/products/${product.id}`}>View details</Link>
         </div>
       ))}

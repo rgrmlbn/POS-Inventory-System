@@ -1,22 +1,23 @@
 import axios from "axios";
-import type { Product, ProductPage } from "../types";
+import type { Product, ProductPage } from "../types/Product";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export const productService = {
-  async getAllProducts(page: number = 0, size: number = 10) {
-    const response = await axios.get<ProductPage>(
-      BASE_URL + "/api/v1/products",
-      {
-        params: {
-          page,
-          size,
-        },
-      },
-    );
+export const ProductService = {
 
-    return response.data;
-  },
+  // async getAllProducts(page: number = 0, size: number = 10) {
+  //   const response = await axios.get<ProductPage>(
+  //     BASE_URL + "/api/v1/products",
+  //     {
+  //       params: {
+  //         page,
+  //         size,
+  //       },
+  //     },
+  //   );
+
+  //   return response.data;
+  // },
 
   async getAllProductsByProductName(
     productName: string,
@@ -37,7 +38,7 @@ export const productService = {
     return response.data;
   },
 
-  async getProductsById(productId: number) {
+  async getProductById(productId: number) {
     const response = await axios.get<Product>(
       BASE_URL + "/api/v1/products/" + productId,
     );

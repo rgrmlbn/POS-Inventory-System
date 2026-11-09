@@ -25,17 +25,24 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('CATEGORY_READ')")
     public ResponseEntity<Page<CategoryResponse>> getAllCategories(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+        return  ResponseEntity.ok(categoryService.getAllCategories(page, size));
+    }
+
+    @GetMapping("/categoryName")
+//    @PreAuthorize("hasAuthority('CATEGORY_READ')")
+    public ResponseEntity<Page<CategoryResponse>> getAllCategoriesByCategoryName(
             @RequestParam(required = false) String categoryName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(categoryService.getAllCategories(categoryName, page, size));
+        return ResponseEntity.ok(categoryService.getAllCategoriesByCategoryName(categoryName, page, size));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('CATEGORY_READ')")
+//    @PreAuthorize("hasAuthority('CATEGORY_READ')")
     public ResponseEntity<CategoryResponse> getCategoryById(
             @PathVariable @Positive Long id) {
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useProductsQuery } from "../hooks/useProductsQuery";
 import { ProductList } from "../components/ProductList";
 import { ProductSearchForm } from "../components/ProductSearchForm";
-import { Pagination } from "../../shared/components/Pagination";
+import { Pagination } from "../../../shared/components/Pagination";
 
 export function ProductPage() {
   const [page, setPage] = useState(0);

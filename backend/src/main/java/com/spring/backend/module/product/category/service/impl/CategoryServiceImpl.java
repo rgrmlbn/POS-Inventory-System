@@ -9,6 +9,7 @@ import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.category.mapper.CategoryMapper;
 import com.spring.backend.module.product.category.repository.CategoryRepository;
 import com.spring.backend.module.product.category.service.interfaces.CategoryService;
+import com.spring.backend.module.product.product.entity.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -28,8 +29,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("categoryPagesAll")
-    public Page<CategoryResponse> getAllCategories(String categoryName, int page, int size) {
+//    @Cacheable("categoryPagesAll")
+    public Page<CategoryResponse> getAllCategories(int page, int size){
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<CategoryEntity> products = categoryRepository.findAll(pageable);
+
+        return products.map(CategoryEntity -> categoryMapper.toResponse(CategoryEntity));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+//    @Cacheable("categoryPagesAll")
+    public Page<CategoryResponse> getAllCategoriesByCategoryName(
+            String categoryName,
+            int page,
+            int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
@@ -45,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
                     );
         }
 
-        return categories.map(categoryMapper::toResponse);
+        return categories.map(CategoryEntity -> categoryMapper.toResponse(CategoryEntity));
     }
 
     @Override

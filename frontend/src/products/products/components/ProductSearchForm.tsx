@@ -5,10 +5,7 @@ interface ProductSearchFormProps {
   onClear: () => void;
 }
 
-export function ProductSearchForm({
-  onSearch,
-  onClear,
-}: ProductSearchFormProps) {
+export function ProductSearchForm({ onSearch, onClear, }: ProductSearchFormProps) {
   const [productName, setProductName] = useState("");
 
   return (

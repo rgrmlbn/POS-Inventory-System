@@ -29,7 +29,6 @@ public class ProductMapper {
                 .productName(entity.getProductName())
                 .categoryName(entity.getCategory().getCategoryName())
                 .sellingPrice(entity.getSellingPrice())
-                .availableQuantity(entity.getInventory().getProductQuantity())
                 .build();
     }
 
