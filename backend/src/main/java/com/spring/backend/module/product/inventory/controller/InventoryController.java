@@ -18,13 +18,21 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<Page<InventoryResponse>> getAllInventory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size ){
+
+        return ResponseEntity.ok(inventoryService.getAllInventory(page, size));
+    }
+
+    @GetMapping("/productName")
+    public ResponseEntity<Page<InventoryResponse>> getAllInventoryByProductName(
             @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size ){
 
-        return ResponseEntity.ok(inventoryService.getAllInventory(productName, page, size));
+        return ResponseEntity.ok(inventoryService.getAllInventoryByProductName(productName, page, size));
     }
 
     @GetMapping("/{productId}")

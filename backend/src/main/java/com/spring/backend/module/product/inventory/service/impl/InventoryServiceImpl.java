@@ -2,6 +2,8 @@ package com.spring.backend.module.product.inventory.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
 
+import com.spring.backend.module.product.category.dto.response.CategoryResponse;
+import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.inventory.dto.request.InventoryUpdateRequest;
 import com.spring.backend.module.product.inventory.dto.response.InventoryResponse;
 import com.spring.backend.module.product.inventory.entity.InventoryEntity;
@@ -24,10 +26,21 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
 
+    @Override
+    @Transactional(readOnly = true)
+    public Page<InventoryResponse> getAllInventory(int page, int size){
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<InventoryEntity> products = inventoryRepository.findAll(pageable);
+
+        return products.map(CategoryEntity -> inventoryMapper.toResponse(CategoryEntity));
+    }
+
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InventoryResponse> getAllInventory(
+    public Page<InventoryResponse> getAllInventoryByProductName(
             String productName,
             int page,
             int size) {

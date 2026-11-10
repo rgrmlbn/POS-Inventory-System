@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 
 public interface InventoryService {
 
-    Page<InventoryResponse> getAllInventory(String productName, int page, int size);
+    Page<InventoryResponse> getAllInventory(int page, int size);
+
+    Page<InventoryResponse> getAllInventoryByProductName(String productName, int page, int size);
 
     void createInventory(ProductEntity product);
 
