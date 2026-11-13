@@ -1,21 +1,21 @@
-import { CategoryService } from "../services/CategoryServices";
+import { InventoryService } from "../services/InventoryService";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-export function useCategoriesQuery(
-  categoryName: string,
+export function useInventoriesQuery(
+  productName: string,
   page: number,
   size: number,
 ) {
   const query = useQuery({
-    queryKey: ["categories", categoryName, page, size],
+    queryKey: ["inventories", productName, page, size],
     queryFn: () =>
-      CategoryService.getAllCategoriesByCategoryName(categoryName, page, size),
+      InventoryService.getAllInventoriesByProductName(productName, page, size),
     placeholderData: keepPreviousData,
   });
 
   return {
-    categories: query.data?.content ?? [],
+    inventories: query.data?.content ?? [],
     totalPages: query.data?.totalPages ?? 0,
     loading: query.isLoading,
     error: query.error,

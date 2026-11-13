@@ -1,4 +1,4 @@
-import { CategoryService } from "../services/CategoryServices";
+import { CategoryService } from "../services/CategoryService";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 

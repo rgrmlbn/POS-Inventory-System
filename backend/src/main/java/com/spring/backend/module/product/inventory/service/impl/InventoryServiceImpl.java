@@ -28,7 +28,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InventoryResponse> getAllInventory(int page, int size){
+    public Page<InventoryResponse> getAllInventories(int page, int size){
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
@@ -40,7 +40,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InventoryResponse> getAllInventoryByProductName(
+    public Page<InventoryResponse> getAllInventoriesByProductName(
             String productName,
             int page,
             int size) {

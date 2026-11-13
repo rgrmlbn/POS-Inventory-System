@@ -1,6 +1,7 @@
 export interface Inventory {
     id: number
-    categoryName: string
+    productName: string
+    quantity: number
 }
 
 export interface InventoryPage {

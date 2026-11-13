@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useCategoriesQuery } from "../hooks/useCategoriesQuery";
-import { Pagination } from "../../../shared/components/Pagination";
-import { CategoryList } from "../components/CategoryList";
-import { CategorySearchForm } from "../components/CategorySearchForm";
 
-export function CategoryPage() {
+import { Pagination } from "../../../shared/components/Pagination";
+import { InventoryList } from "../components/InventoryList";
+import { useInventoriesQuery } from "../hooks/useInventoriesQuery";
+import { InventorySearchForm } from "../components/InventorySearchForm";
+
+export function InventoryPage() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-  const [categoryName, setCategoryName] = useState("");
+  const [productName, setProductName] = useState("");
 
-  const { categories, totalPages, loading, error } = useCategoriesQuery(
-    categoryName,
+  const { inventories, totalPages, loading, error } = useInventoriesQuery(
+    productName,
     page,
     size,
   );
@@ -19,18 +20,18 @@ export function CategoryPage() {
     <div>
       <h1>Categories</h1>
 
-      <CategorySearchForm
+      <InventorySearchForm
         onSearch={(name) => {
-          setCategoryName(name);
+          setProductName(name);
           setPage(0);
         }}
         onClear={() => {
-          setCategoryName("");
+          setProductName("");
           setPage(0);
         }}
       />
 
-      <CategoryList categories={categories} loading={loading} error={error} />
+      <InventoryList inventories={inventories} loading={loading} error={error} />
 
       <Pagination
         page={page}
