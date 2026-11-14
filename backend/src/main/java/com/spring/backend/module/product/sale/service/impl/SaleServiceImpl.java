@@ -1,6 +1,8 @@
 package com.spring.backend.module.product.sale.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
+import com.spring.backend.module.product.category.dto.response.CategoryResponse;
+import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
 import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.repository.ProductRepository;
@@ -33,24 +35,34 @@ public class SaleServiceImpl implements SaleService {
     private final InventoryService inventoryService;
     private final ProductRepository productRepository;
 
+    @Override
+    public Page<SaleResponse> getAllSales(int page, int size){
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<SaleEntity> products = saleRepository.findAll(pageable);
+
+        return products.map(SaleEntity -> saleMapper.toResponse(SaleEntity));
+    }
 
     @Override
-    public Page<SaleResponse> getAllSales(String saleName, int page, int size) {
+    public Page<SaleResponse> getAllSalesByProductName(String productName, int page, int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
         Page<SaleEntity> sales;
 
-        if(saleName == null || saleName.isBlank()) {
+        if(productName == null || productName.isBlank()) {
             sales = saleRepository.findAll(pageable);
         } else {
-            sales = saleRepository.findDistinctBySaleItemsProductProductNameContainingIgnoreCase(
-                    saleName.trim(),
-                    pageable
-            );
+            sales = saleRepository
+                    .findDistinctBySaleItemsProductProductNameContainingIgnoreCase(
+                        productName.trim(),
+                        pageable
+                    );
         }
 
-        return sales.map(saleEntity -> saleMapper.toResponse(saleEntity));
+        return sales.map(SaleEntity -> saleMapper.toResponse(SaleEntity));
     }
 
     @Override

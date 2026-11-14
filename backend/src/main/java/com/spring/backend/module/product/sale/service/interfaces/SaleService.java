@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 
 public interface SaleService {
 
-    Page<SaleResponse> getAllSales(String saleName, int page, int size);
+    Page<SaleResponse> getAllSales(int page, int size);
+
+    Page<SaleResponse> getAllSalesByProductName(String productName, int page, int size);
 
     SaleResponse getSaleById(Long saleId);
 
