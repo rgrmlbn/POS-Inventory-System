@@ -38,9 +38,9 @@ export const ProductService = {
     return response.data;
   },
 
-  async getProductById(productId: number) {
+  async getProductById(id: number) {
     const response = await axios.get<Product>(
-      BASE_URL + "/api/v1/products/" + productId,
+      BASE_URL + "/api/v1/products/" + id,
     );
 
     return response.data;

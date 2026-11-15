@@ -68,10 +68,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "product", key = "#productId")
-    public ProductDetailedResponse getProductById(Long productId) {
+    @Cacheable(value = "product", key = "#id")
+    public ProductDetailedResponse getProductById(Long id) {
 
-        ProductEntity product = productRepository.findProductById(productId)
+        ProductEntity product = productRepository.findProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         return productMapper.toDetailedResponse(product);

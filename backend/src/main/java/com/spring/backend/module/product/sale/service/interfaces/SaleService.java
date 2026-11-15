@@ -10,7 +10,7 @@ public interface SaleService {
 
     Page<SaleResponse> getAllSalesByProductName(String productName, int page, int size);
 
-    SaleResponse getSaleById(Long saleId);
+    SaleResponse getSaleById(Long id);
 
     SaleResponse createSale(SaleCreateRequest request);
 

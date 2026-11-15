@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { CategoryService } from "../services/CategoryService";
 
-export function useCategoryQuery(categoryId: number) {
+export function useCategoryQuery(id: number) {
   const query = useQuery({
-    queryKey: ["category", categoryId],
-    queryFn: () => CategoryService.getCategoryById(categoryId),
+    queryKey: ["category", id],
+    queryFn: () => CategoryService.getCategoryById(id),
   });
 
   return {

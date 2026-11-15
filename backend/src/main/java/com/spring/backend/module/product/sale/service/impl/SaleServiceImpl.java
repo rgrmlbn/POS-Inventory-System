@@ -66,9 +66,9 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public SaleResponse getSaleById(Long saleId) {
+    public SaleResponse getSaleById(Long id) {
 
-        SaleEntity sale = saleRepository.findWithItemsById(saleId)
+        SaleEntity sale = saleRepository.findSaleById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sale"));
 
         return saleMapper.toResponse(sale);

@@ -18,7 +18,7 @@ export function InventoryPage() {
 
   return (
     <div>
-      <h1>Categories</h1>
+      <h1>Inventories</h1>
 
       <InventorySearchForm
         onSearch={(name) => {

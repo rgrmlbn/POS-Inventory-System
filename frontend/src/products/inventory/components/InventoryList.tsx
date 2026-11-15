@@ -21,7 +21,7 @@ export function InventoryList({
       {inventories.map((inventory) => (
         <div key={inventory.id}>
           <h2>{inventory.productName}</h2>
-          <h2>{inventory.quantity}</h2>
+          <h2>Quantity: {inventory.quantity}</h2>
           <Link to={`/inventories/${inventory.id}`}>View details</Link>
         </div>
       ))}

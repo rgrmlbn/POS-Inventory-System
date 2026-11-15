@@ -87,7 +87,7 @@ public class SecurityConfig {
                                 // -> Public product endpoints
                                 "/api/v1/products",
                                 "/api/v1/products/productName",
-                                "/api/v1/products/{productId}",
+                                "/api/v1/products/{id}",
 
                                 // -> Temporary public category endpoints
                                 "/api/v1/categories",
@@ -96,12 +96,12 @@ public class SecurityConfig {
                                 // -> Temporary public inventory endpoints
                                 "/api/v1/inventories",
                                 "/api/v1/inventories/productName",
-                                "/api/v1/inventories/{productId}",
+                                "/api/v1/inventories/{id}",
 
                                 // -> Temporary public sales endpoints
                                 "/api/v1/sales",
                                 "/api/v1/sales/productName",
-                                "/api/v1/sales/{saleId}"
+                                "/api/v1/sales/{id}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

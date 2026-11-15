@@ -23,9 +23,9 @@ export const InventoryService = {
     return response.data;
   },
 
-  async getInventoryByProductId(productId: number) {
+  async getInventoryById(id: number) {
     const response = await axios.get<Inventory>(
-      BASE_URL + "/api/v1/inventories/" + productId,
+      BASE_URL + "/api/v1/inventories/" + id,
     );
 
     return response.data;

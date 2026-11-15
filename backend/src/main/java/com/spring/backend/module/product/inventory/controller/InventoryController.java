@@ -35,11 +35,11 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getAllInventoriesByProductName(productName, page, size));
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{id}")
     public ResponseEntity<InventoryResponse> getInventoryByProductId(
-            @PathVariable @Positive Long productId){
+            @PathVariable @Positive Long id){
 
-        return ResponseEntity.ok(inventoryService.getInventoryByProductId(productId));
+        return ResponseEntity.ok(inventoryService.getInventoryById(id));
     }
 
     @PostMapping("/{productId}/update")

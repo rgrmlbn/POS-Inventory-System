@@ -63,11 +63,11 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "inventory", key = "#productId")
-    public InventoryResponse getInventoryByProductId(Long productId) {
+    @Cacheable(value = "inventory", key = "#id")
+    public InventoryResponse getInventoryById(Long id) {
 
-        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+        InventoryEntity inventory = inventoryRepository.findInventoryById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory"));
 
         return inventoryMapper.toResponse(inventory);
     }
@@ -76,7 +76,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional
     @CacheEvict(value = "inventory", key = "#productId")
     public InventoryResponse updateProductInventory(Long productId, InventoryUpdateRequest request) {
-        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
+        InventoryEntity inventory = inventoryRepository.findInventoryById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         inventory.setProductQuantity(request.getQuantity());
@@ -98,7 +98,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void increaseStock(Long productId, int productQuantity) {
 
-        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
+        InventoryEntity inventory = inventoryRepository.findInventoryById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         inventory.setProductQuantity(inventory.getProductQuantity() + productQuantity);
@@ -108,7 +108,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void decreaseStock(Long productId, int productQuantity) {
 
-        InventoryEntity inventory = inventoryRepository.findInventoryByProductId(productId)
+        InventoryEntity inventory = inventoryRepository.findInventoryById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         if(inventory.getProductQuantity() < productQuantity) {

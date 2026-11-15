@@ -18,6 +18,6 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
     Page<InventoryEntity> findByProductProductNameContainingIgnoreCase(String productName, Pageable pageable);
 
     @EntityGraph(attributePaths = {"product", "product.category"})
-    Optional<InventoryEntity> findInventoryByProductId(Long productId);
+    Optional<InventoryEntity> findInventoryById(Long id);
 
 }

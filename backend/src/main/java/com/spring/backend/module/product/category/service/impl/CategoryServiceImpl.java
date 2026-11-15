@@ -29,7 +29,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-//    @Cacheable("categoryPagesAll")
     public Page<CategoryResponse> getAllCategories(int page, int size){
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);

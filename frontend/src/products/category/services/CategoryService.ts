@@ -1,12 +1,10 @@
-import axios from "axios"
-import type { Category, CategoryPage } from "../types/Category"
-
+import axios from "axios";
+import type { Category, CategoryPage } from "../types/Category";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const CategoryService = {
-
-      async getAllCategoriesByCategoryName(
+  async getAllCategoriesByCategoryName(
     categoryName: string,
     page: number = 0,
     size: number = 10,
@@ -25,12 +23,11 @@ export const CategoryService = {
     return response.data;
   },
 
-  async getCategoryById(categoryId: number) {
+  async getCategoryById(id: number) {
     const response = await axios.get<Category>(
-      BASE_URL + "/api/v1/categories/" + categoryId,
+      BASE_URL + "/api/v1/categories/" + id,
     );
 
     return response.data;
   },
-
 };

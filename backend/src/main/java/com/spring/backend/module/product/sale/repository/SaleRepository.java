@@ -16,6 +16,6 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
     Page<SaleEntity> findDistinctBySaleItemsProductProductNameContainingIgnoreCase(String productName, Pageable pageable);
 
     @EntityGraph(attributePaths = {"saleItems", "saleItems.product"})
-    Optional<SaleEntity> findWithItemsById(Long id);
+    Optional<SaleEntity> findSaleById(Long id);
 
 }

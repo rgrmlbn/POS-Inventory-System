@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { InventoryService } from "../services/InventoryService";
 
-export function useInventoryQuery(productId: number) {
+export function useInventoryQuery(id: number) {
   const query = useQuery({
-    queryKey: ["product", productId],
-    queryFn: () => InventoryService.getInventoryByProductId(productId),
+    queryKey: ["inventory", id],
+    queryFn: () => InventoryService.getInventoryById(id),
   });
 
   return {
-    product: query.data,
+    inventory: query.data,
     loading: query.isLoading,
     error: query.error,
   };

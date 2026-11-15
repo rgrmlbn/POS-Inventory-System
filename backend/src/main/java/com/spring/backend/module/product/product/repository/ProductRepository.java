@@ -26,7 +26,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     Page<ProductEntity> findAllBySkuContainingIgnoreCase(String sku, Pageable pageable);
 
     @EntityGraph(attributePaths = {"category", "inventory"})
-    Optional<ProductEntity> findProductById(Long productId);
+    Optional<ProductEntity> findProductById(Long id);
 
     boolean existsBySku(String sku);
 

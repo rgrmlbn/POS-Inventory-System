@@ -35,11 +35,11 @@ public class SaleController {
         return ResponseEntity.ok(saleService.getAllSalesByProductName(productName, page, size));
     }
 
-    @GetMapping("/{saleId}")
+    @GetMapping("/{id}")
     public ResponseEntity<SaleResponse> getSaleById(
-            @PathVariable @Positive Long saleId) {
+            @PathVariable @Positive Long id) {
 
-        return ResponseEntity.ok(saleService.getSaleById(saleId));
+        return ResponseEntity.ok(saleService.getSaleById(id));
     }
 
     @PostMapping

@@ -13,7 +13,7 @@ public interface InventoryService {
 
     void createInventory(ProductEntity product);
 
-    InventoryResponse getInventoryByProductId(Long productId);
+    InventoryResponse getInventoryById(Long id);
 
     InventoryResponse updateProductInventory(Long productId, InventoryUpdateRequest request);
 

@@ -40,12 +40,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProductsByProductName(search, page, size));
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{id}")
 //    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     public ResponseEntity<ProductDetailedResponse> getProductById(
-            @PathVariable @Positive Long productId) {
+            @PathVariable @Positive Long id) {
 
-        return ResponseEntity.ok(productService.getProductById(productId));
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping("/sku")
