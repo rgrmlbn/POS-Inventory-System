@@ -21,5 +21,5 @@ public interface PurchaseRepository extends JpaRepository<PurchaseEntity, Long> 
     );
 
     @EntityGraph(attributePaths = {"product", "product.category"})
-    Optional<PurchaseEntity> findPurchaseByProductId(Long productId);
+    Optional<PurchaseEntity> findPurchaseById(Long id);
 }

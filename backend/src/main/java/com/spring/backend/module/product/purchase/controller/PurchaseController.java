@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/purchase")
+@RequestMapping("/api/v1/purchases")
 @RequiredArgsConstructor
 @Validated
 public class PurchaseController {
@@ -21,19 +21,27 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     @GetMapping
-    public ResponseEntity<Page<PurchaseResponse>> getAllPurchase(
+    public ResponseEntity<Page<PurchaseResponse>> getAllPurchases(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(purchaseService.getAllPurchases(page, size));
+    }
+
+    @GetMapping("/productName")
+    public ResponseEntity<Page<PurchaseResponse>> getAllPurchasesByProductName(
             @RequestParam(required = false) String productName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(purchaseService.getAllPurchase(productName, page, size));
+        return ResponseEntity.ok(purchaseService.getAllPurchasesByProductName(productName, page, size));
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{id}")
     public ResponseEntity<PurchaseResponse> getPurchaseByProductId(
-            @PathVariable @Positive Long productId){
+            @PathVariable @Positive Long id){
 
-        return ResponseEntity.ok(purchaseService.getPurchaseByProductId(productId));
+        return ResponseEntity.ok(purchaseService.getPurchaseById(id));
     }
 
     @PostMapping("/create")

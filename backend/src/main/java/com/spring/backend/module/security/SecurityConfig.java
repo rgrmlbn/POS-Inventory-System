@@ -101,7 +101,12 @@ public class SecurityConfig {
                                 // -> Temporary public sales endpoints
                                 "/api/v1/sales",
                                 "/api/v1/sales/productName",
-                                "/api/v1/sales/{id}"
+                                "/api/v1/sales/{id}",
+
+                                //  -> Temporary public purchase endpoints
+                                "/api/v1/purchases",
+                                "/api/v1/purchases/productName",
+                                "/api/v1/purchases/{id}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

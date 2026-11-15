@@ -1,6 +1,7 @@
 package com.spring.backend.module.product.purchase.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
+import com.spring.backend.module.product.inventory.entity.InventoryEntity;
 import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
 import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.repository.ProductRepository;
@@ -27,7 +28,20 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final  InventoryService inventoryService;
 
     @Override
-    public Page<PurchaseResponse> getAllPurchase(String productName, int page, int size) {
+    public Page<PurchaseResponse> getAllPurchases(int page, int size) {
+
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+
+        Page<PurchaseEntity> products = purchaseRepository.findAll(pageable);
+
+        return products.map(PurchaseEntity -> purchaseMapper.toResponse(PurchaseEntity));
+    }
+
+    @Override
+    public Page<PurchaseResponse> getAllPurchasesByProductName(
+            String productName,
+            int page,
+            int size) {
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
 
@@ -46,9 +60,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public PurchaseResponse getPurchaseByProductId(Long productId) {
+    public PurchaseResponse getPurchaseById(Long id) {
 
-        PurchaseEntity purchase = purchaseRepository.findPurchaseByProductId(productId)
+        PurchaseEntity purchase = purchaseRepository.findPurchaseById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Purchase"));
 
         return purchaseMapper.toResponse(purchase);
