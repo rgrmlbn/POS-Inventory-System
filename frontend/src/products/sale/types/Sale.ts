@@ -22,6 +22,6 @@ export interface Sale {
 }
 
 export interface SalePage {
-  content: Sale[];
-  totalPages: number;
+  content: Sale[]
+  totalPages: number
 }
