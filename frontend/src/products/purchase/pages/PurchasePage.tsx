@@ -19,7 +19,7 @@ export function PurchasePage() {
 
   return (
     <div>
-      <h1>Inventories</h1>
+      <h1>Purchases</h1>
 
       <PurchaseSearchForm
         onSearch={(name) => {

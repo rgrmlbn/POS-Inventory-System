@@ -86,6 +86,7 @@ public class AuthServiceImpl implements AuthService {
      * @return the response containing the access token and refresh token
      */
     @Override
+    @Transactional
     public AuthResponse login(LoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -110,6 +111,7 @@ public class AuthServiceImpl implements AuthService {
      * @return the response containing the new access token and refresh token
      */
     @Override
+    @Transactional
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         RefreshToken oldToken = refreshTokenService.validateRefreshToken(request.getRefreshToken());
 

@@ -19,7 +19,7 @@ export function SalePage() {
 
   return (
     <div>
-      <h1>Inventories</h1>
+      <h1>Sales</h1>
 
       <SaleSearchForm
         onSearch={(name) => {
