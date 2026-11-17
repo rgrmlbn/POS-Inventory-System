@@ -89,9 +89,19 @@ public class SecurityConfig {
                                 "/api/v1/products/productName",
                                 "/api/v1/products/{id}",
 
+                                "/api/v1/products/create",
+                                "/api/v1/products/{id}/update",
+                                "/api/v1/products/{id}/delete",
+                                "/api/v1/products/delete-all",
+
                                 // -> Temporary public category endpoints
                                 "/api/v1/categories",
                                 "/api/v1/categories/categoryName",
+
+                                "/api/v1/categories/create",
+                                "/api/v1/categories/{id}/update",
+                                "/api/v1/categories/{id}/delete",
+                                "/api/v1/categories/delete-all",
 
                                 // -> Temporary public inventory endpoints
                                 "/api/v1/inventories",

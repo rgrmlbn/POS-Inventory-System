@@ -23,7 +23,7 @@ public interface ProductService {
 
     ProductResponse createProduct(ProductCreateRequest request);
 
-    ProductResponse updateProduct(Long id, ProductUpdateRequest update);
+    ProductResponse updateProductById(Long id, ProductUpdateRequest update);
 
     void deleteProductById(Long id);
 

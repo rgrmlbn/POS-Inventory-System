@@ -118,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     @CachePut(value = "product", key = "#productId")
-    public ProductResponse updateProduct(Long productId, ProductUpdateRequest update) {
+    public ProductResponse updateProductById(Long productId, ProductUpdateRequest update) {
 
         ProductEntity product = productRepository.findProductById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));

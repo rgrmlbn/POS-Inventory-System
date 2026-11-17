@@ -24,13 +24,13 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
-    public ResponseEntity<Page<CategoryResponse>> getAllCategories(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size){
-
-        return  ResponseEntity.ok(categoryService.getAllCategories(page, size));
-    }
+//    @GetMapping
+//    public ResponseEntity<Page<CategoryResponse>> getAllCategories(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size){
+//
+//        return  ResponseEntity.ok(categoryService.getAllCategories(page, size));
+//    }
 
     @GetMapping("/categoryName")
 //    @PreAuthorize("hasAuthority('CATEGORY_READ')")
@@ -51,7 +51,7 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
+//    @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
     public ResponseEntity<CategoryResponse> createCategory(
             @RequestBody @Valid CategoryCreateRequest request) {
 
@@ -60,7 +60,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/{id}/update")
-    @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
+//    @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
     public ResponseEntity<CategoryResponse> updateCategoryById(
             @PathVariable @Positive Long id,
             @RequestBody @Valid CategoryUpdateRequest update) {
@@ -69,7 +69,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}/delete")
-    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
+//    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
     public ResponseEntity<Void> deleteCategoryById(
             @PathVariable @Positive Long id) {
 
@@ -79,7 +79,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete-all")
-    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
+//    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
     public ResponseEntity<Void> deleteAllCategories() {
 
         categoryService.deleteAllCategories();

@@ -69,7 +69,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
+//    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
     public ResponseEntity<ProductResponse> createProduct(
             @RequestBody @Valid ProductCreateRequest request) {
 
@@ -77,17 +77,17 @@ public class ProductController {
                 .body(productService.createProduct(request));
     }
 
-    @PatchMapping("/{productId}/update")
-    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
-    public ResponseEntity<ProductResponse> updateProduct(
+    @PatchMapping("/{id}/update")
+//    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
+    public ResponseEntity<ProductResponse> updateProductById(
             @PathVariable @Positive Long productId,
             @RequestBody @Valid ProductUpdateRequest update) {
 
-        return ResponseEntity.ok(productService.updateProduct(productId, update));
+        return ResponseEntity.ok(productService.updateProductById(productId, update));
     }
 
-    @DeleteMapping("/{productId}/delete")
-    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
+    @DeleteMapping("/{id}/delete")
+//    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
     public ResponseEntity<Void> deleteProductById(
             @PathVariable @Positive Long productId) {
 
