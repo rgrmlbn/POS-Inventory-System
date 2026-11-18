@@ -76,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "categoryPagesAll", allEntries = true)
+//    @CacheEvict(value = "categoryPagesAll", allEntries = true)
     public CategoryResponse createCategory(CategoryCreateRequest request) {
 
         if (categoryRepository.existsByCategoryName(request.getCategoryName())) {

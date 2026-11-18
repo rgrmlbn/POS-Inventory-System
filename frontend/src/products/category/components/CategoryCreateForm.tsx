@@ -23,9 +23,9 @@ export function CategoryCreateForm() {
       {
         onSuccess: () => reset(),
         onError: (error) => {
-          const message = axios.isAxiosError(error)
-            ? error.response?.data?.message ?? "Failed to create category."
-            : "Failed to create category.";
+          const message = axios.isAxiosError(error) // 1. CONDITION
+            ? (error.response?.data?.message ?? "Failed to create category.") // 2. if true -- if left is null, use right
+            : "Failed to create category."; // 3. if false
 
           // show the server error under the field
           setError("categoryName", { type: "server", message });

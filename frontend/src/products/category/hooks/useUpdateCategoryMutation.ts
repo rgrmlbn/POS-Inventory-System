@@ -8,7 +8,7 @@ export function useUpdateCategoryMutation() {
   const mutation = useMutation({
     mutationFn: ({ id, request }: { id: number; request: CategoryUpdateRequest }) =>
       CategoryService.updateCategoryById(id, request),
-    onSuccess: (_data, { id }) => {
+    onSuccess: (_unused_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: ["category", id] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },

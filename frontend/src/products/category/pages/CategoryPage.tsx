@@ -3,6 +3,7 @@ import { useCategoriesQuery } from "../hooks/useCategoriesQuery";
 import { Pagination } from "../../../shared/components/Pagination";
 import { CategoryList } from "../components/CategoryList";
 import { CategorySearchForm } from "../components/CategorySearchForm";
+import { CategoryCreateForm } from "../components/CategoryCreateForm"; // 1. import
 
 export function CategoryPage() {
   const [page, setPage] = useState(0);
@@ -18,6 +19,8 @@ export function CategoryPage() {
   return (
     <div>
       <h1>Categories</h1>
+
+      <CategoryCreateForm />
 
       <CategorySearchForm
         onSearch={(name) => {

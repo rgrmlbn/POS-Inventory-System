@@ -6,7 +6,7 @@ export function useDeleteCategoryMutation() {
 
   const mutation = useMutation({
     mutationFn: (id: number) => CategoryService.deleteCategoryById(id),
-    onSuccess: (_data, id) => {
+    onSuccess: (_unused_data, id) => {
       queryClient.removeQueries({ queryKey: ["category", id] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
