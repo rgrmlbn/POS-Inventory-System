@@ -14,7 +14,7 @@ export function CategoryCreateForm() {
     setError,
     formState: { errors },
   } = useForm<CategoryCreateRequest>({
-    defaultValues: { categoryName: "" },
+    defaultValues: { categoryName: "" }
   });
 
   function onSubmit(values: CategoryCreateRequest) {

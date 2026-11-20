@@ -2,13 +2,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CategoryService } from "../services/CategoryService";
 import type { CategoryUpdateRequest } from "../types/Category";
 
+interface UpdateCategoryVariables {
+  id: number;
+  request: CategoryUpdateRequest;
+};
+
 export function useUpdateCategoryMutation() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ id, request }: { id: number; request: CategoryUpdateRequest }) =>
+    mutationFn: ({ id, request }: UpdateCategoryVariables) =>
       CategoryService.updateCategoryById(id, request),
-    onSuccess: (_unused_data, { id }) => {
+    onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: ["category", id] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },

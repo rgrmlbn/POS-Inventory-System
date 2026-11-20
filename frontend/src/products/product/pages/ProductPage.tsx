@@ -3,6 +3,7 @@ import { useProductsQuery } from "../hooks/useProductsQuery";
 import { ProductList } from "../components/ProductList";
 import { ProductSearchForm } from "../components/ProductSearchForm";
 import { Pagination } from "../../../shared/components/Pagination";
+import { ProductCreateForm } from "../components/ProductCreateForm";
 
 export function ProductPage() {
   const [page, setPage] = useState(0);
@@ -18,6 +19,8 @@ export function ProductPage() {
   return (
     <div>
       <h1>Products</h1>
+
+      <ProductCreateForm />
 
       <ProductSearchForm
         onSearch={(name) => {
