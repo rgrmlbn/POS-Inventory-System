@@ -1,4 +1,4 @@
-import { PurchaseService } from "../services/PurchaseService";
+import { PurchaseService } from "../../services/PurchaseService";
 
 import { useQuery } from "@tanstack/react-query";
 

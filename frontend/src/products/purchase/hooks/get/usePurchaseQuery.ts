@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PurchaseService } from "../services/PurchaseService";
+import { PurchaseService } from "../../services/PurchaseService";
 
 export function usePurchaseQuery(id: number) {
   const query = useQuery({

@@ -2,14 +2,13 @@ package com.spring.backend.module.product.sale.mapper;
 
 import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.sale.dto.request.SaleCreateRequest;
-import com.spring.backend.module.product.sale.dto.request.SaleItemRequest;
+import com.spring.backend.module.product.sale.dto.request.SaleItemCreateRequest;
 import com.spring.backend.module.product.sale.dto.response.SaleItemResponse;
 import com.spring.backend.module.product.sale.dto.response.SaleResponse;
 import com.spring.backend.module.product.sale.entity.SaleEntity;
 import com.spring.backend.module.product.sale.entity.SaleItemEntity;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -23,17 +22,13 @@ public class SaleMapper {
                 .build();
     }
 
-    public SaleItemEntity toItemEntity(SaleItemRequest request, ProductEntity product, SaleEntity sale) {
-        BigDecimal lineTotal = product.getSellingPrice()
-                .multiply(BigDecimal.valueOf(request.getQuantity()));
-
+    public SaleItemEntity toItemEntity(SaleItemCreateRequest request, ProductEntity product, SaleEntity sale) {
         return SaleItemEntity.builder()
                 .sale(sale)
                 .product(product)
                 .saleQuantity(request.getQuantity())
                 .unitPrice(product.getSellingPrice())
                 .unitCost(product.getCostPrice())
-                .lineTotal(lineTotal)
                 .build();
     }
 

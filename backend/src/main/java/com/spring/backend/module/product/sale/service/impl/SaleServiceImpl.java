@@ -1,13 +1,11 @@
 package com.spring.backend.module.product.sale.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
-import com.spring.backend.module.product.category.dto.response.CategoryResponse;
-import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
 import com.spring.backend.module.product.product.entity.ProductEntity;
 import com.spring.backend.module.product.product.repository.ProductRepository;
 import com.spring.backend.module.product.sale.dto.request.SaleCreateRequest;
-import com.spring.backend.module.product.sale.dto.request.SaleItemRequest;
+import com.spring.backend.module.product.sale.dto.request.SaleItemCreateRequest;
 import com.spring.backend.module.product.sale.dto.response.SaleResponse;
 import com.spring.backend.module.product.sale.entity.SaleEntity;
 import com.spring.backend.module.product.sale.entity.SaleItemEntity;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,8 +81,9 @@ public class SaleServiceImpl implements SaleService {
         sale.setSaleStatus(SaleStatus.COMPLETED);
 
         BigDecimal subTotal = BigDecimal.ZERO;
+        List<SaleItemEntity> saleItems = new ArrayList<>();
 
-        for (SaleItemRequest itemRequest : request.getItems()) {
+        for (SaleItemCreateRequest itemRequest : request.getItems()) {
 
             ProductEntity product = productRepository.findById(itemRequest.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product"));
@@ -92,9 +92,18 @@ public class SaleServiceImpl implements SaleService {
             inventoryService.decreaseStock(product.getId(), itemRequest.getQuantity());
 
             SaleItemEntity item = saleMapper.toItemEntity(itemRequest, product, sale);
-            sale.getSaleItems().add(item);
+
+            BigDecimal lineTotal = product.getSellingPrice()
+                    .multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
+
+            item.setLineTotal(lineTotal);
+
+            saleItems.add(item);
+
             subTotal = subTotal.add(item.getLineTotal());
+
         }
+        sale.setSaleItems(saleItems);
 
         BigDecimal discount = request.getDiscount() != null ? request.getDiscount() : BigDecimal.ZERO;
 

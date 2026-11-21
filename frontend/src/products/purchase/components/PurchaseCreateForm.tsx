@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useProductsQuery } from "../../product/hooks/get/useProductsQuery";
-import { useCreatePurchaseMutation } from "../hooks/useCreatePurchaseMutation";
+import { useCreatePurchaseMutation } from "../hooks/post/useCreatePurchaseMutation";
 import type { PurchaseCreateRequest } from "../types/Purchase";
 
 export function PurchaseCreateForm() {

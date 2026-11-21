@@ -1,8 +1,12 @@
-import { PurchaseService } from "../services/PurchaseService";
+import { PurchaseService } from "../../services/PurchaseService";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-export function usePurchasesPageQuery(productName: string, page: number, size: number) {
+export function usePurchasesPageQuery(
+  productName: string,
+  page: number,
+  size: number,
+) {
   const query = useQuery({
     queryKey: ["purchases", productName, page, size],
     queryFn: () =>

@@ -1,6 +1,6 @@
 // pages/ProductDetailPage.tsx
 import { useParams, Link } from "react-router-dom";
-import { useSaleQuery } from "../hooks/useSaleQuery";
+import { useSaleQuery } from "../hooks/get/useSaleQuery";
 
 export function SaleDetailPage() {
   const { id } = useParams();

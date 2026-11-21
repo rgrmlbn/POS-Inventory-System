@@ -1,6 +1,6 @@
 // pages/ProductDetailPage.tsx
 import { useParams, Link } from "react-router-dom";
-import { usePurchaseQuery } from "../hooks/usePurchaseQuery";
+import { usePurchaseQuery } from "../hooks/get/usePurchaseQuery";
 
 export function PurchaseDetailPage() {
   const { id } = useParams();

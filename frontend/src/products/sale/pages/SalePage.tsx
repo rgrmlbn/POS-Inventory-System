@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import { Pagination } from "../../../shared/components/Pagination";
 import { SaleList } from "../components/SaleList";
-import { useSalesPageQuery } from "../hooks/useSalesPageQuery"; 
+import { useSalesPageQuery } from "../hooks/get/useSalesPageQuery";
 import { SaleSearchForm } from "../components/SaleSearchForm";
+import { SaleCreateForm } from "../components/SaleCreateForm";
 
 
 export function SalePage() {
@@ -20,6 +21,8 @@ export function SalePage() {
   return (
     <div>
       <h1>Sales</h1>
+
+      <SaleCreateForm />
 
       <SaleSearchForm
         onSearch={(name) => {

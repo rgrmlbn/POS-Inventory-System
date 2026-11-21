@@ -2,10 +2,9 @@ import { useState } from "react";
 
 import { Pagination } from "../../../shared/components/Pagination";
 import { PurchaseList } from "../components/PurchaseList";
-import { usePurchasesPageQuery } from "../hooks/usePurchasesPageQuery"; 
+import { usePurchasesPageQuery } from "../hooks/get/usePurchasesPageQuery";
 import { PurchaseSearchForm } from "../components/PurchaseSearchForm";
 import { PurchaseCreateForm } from "../components/PurchaseCreateForm";
-
 
 export function PurchasePage() {
   const [page, setPage] = useState(0);

@@ -42,7 +42,7 @@ public class SaleController {
         return ResponseEntity.ok(saleService.getSaleById(id));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<SaleResponse> createSale(@Valid @RequestBody SaleCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(saleService.createSale(request));
     }
