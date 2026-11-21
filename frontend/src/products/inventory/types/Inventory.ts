@@ -1,5 +1,6 @@
 export interface Inventory {
   id: number;
+  productId: string
   productName: string;
   categoryName: string;
   sku: string;
@@ -10,4 +11,8 @@ export interface Inventory {
 export interface InventoryPage {
   content: Inventory[];
   totalPages: number;
+}
+
+export interface InventoryUpdateRequest {
+  quantity: number;
 }

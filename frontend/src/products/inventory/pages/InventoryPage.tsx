@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Pagination } from "../../../shared/components/Pagination";
 import { InventoryList } from "../components/InventoryList";
-import { useInventoriesPageQuery } from "../hooks/get/useInventoriesPage";
+import { useInventoriesPageQuery } from "../hooks/get/useInventoriesPageQuery";
 import { InventorySearchForm } from "../components/InventorySearchForm";
 
 export function InventoryPage() {

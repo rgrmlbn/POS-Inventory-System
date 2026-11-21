@@ -3,6 +3,7 @@ package com.spring.backend.module.product.inventory.controller;
 import com.spring.backend.module.product.inventory.dto.request.InventoryUpdateRequest;
 import com.spring.backend.module.product.inventory.dto.response.InventoryResponse;
 import com.spring.backend.module.product.inventory.service.interfaces.InventoryService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,11 +43,11 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getInventoryById(id));
     }
 
-    @PostMapping("/{productId}/update")
-    public ResponseEntity<InventoryResponse> updateInventory(
+    @PatchMapping("/{id}/update")
+    public ResponseEntity<InventoryResponse> updateInventoryById(
             @PathVariable @Positive Long id,
-            @RequestBody InventoryUpdateRequest request){
-        // Implementation for updating inventory
+            @Valid @RequestBody InventoryUpdateRequest request) {
+
         return ResponseEntity.ok(inventoryService.updateInventoryById(id, request));
     }
 }

@@ -1,5 +1,9 @@
 import axios from "axios";
-import type { Inventory, InventoryPage } from "../types/Inventory";
+import type {
+  Inventory,
+  InventoryPage,
+  InventoryUpdateRequest,
+} from "../types/Inventory";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -35,6 +39,16 @@ export const InventoryService = {
   async getInventoryById(id: number) {
     const response = await axios.get<Inventory>(
       BASE_URL + "/api/v1/inventories/" + id,
+    );
+
+    return response.data;
+  },
+
+  // -> PATCH ENDPOINTS
+  async updateInventoryById(id: number, request: InventoryUpdateRequest) {
+    const response = await axios.patch<Inventory>(
+      BASE_URL + "/api/v1/inventories/" + id + "/update",
+      request,
     );
 
     return response.data;

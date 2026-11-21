@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProductService } from "../../services/ProductService";
 import type { ProductUpdateRequest } from "../../types/Product";
 
-interface UpdateProductVariables {
+interface ProductUpdateRequestVariables {
   id: number;
   request: ProductUpdateRequest;
 }
@@ -11,7 +11,7 @@ export function useUpdateProductMutation() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ id, request }: UpdateProductVariables) =>
+    mutationFn: ({ id, request }: ProductUpdateRequestVariables) =>
       ProductService.updateProductById(id, request),
 
     onSuccess: (_, { id }) => {
