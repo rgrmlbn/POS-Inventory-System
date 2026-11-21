@@ -1,5 +1,9 @@
 import axios from "axios";
-import type { Purchase, PurchasePage } from "../types/Purchase";
+import type {
+  Purchase,
+  PurchasePage,
+  PurchaseCreateRequest,
+} from "../types/Purchase";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -26,7 +30,7 @@ export const PurchaseService = {
 
   async getAllPurchases() {
     const response = await axios.get<Purchase[]>(
-      BASE_URL + "/api/v1/purchases"
+      BASE_URL + "/api/v1/purchases",
     );
 
     return response.data;
@@ -37,6 +41,15 @@ export const PurchaseService = {
       BASE_URL + "/api/v1/purchases/" + id,
     );
 
+    return response.data;
+  },
+
+  // -> POST ENDPOINTS
+  async createPurchase(request: PurchaseCreateRequest) {
+    const response = await axios.post<Purchase>(
+      BASE_URL + "/api/v1/purchases/create",
+      request,
+    );
     return response.data;
   },
 };

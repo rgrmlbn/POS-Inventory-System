@@ -22,7 +22,6 @@ export function ProductList({ products, loading, error }: ProductListProps) {
             {product.categoryName}
           </p>
           <ul>
-            <li>Reorder Level: {product.reorderLevel}</li>
             <li>Selling Price: {product.sellingPrice}</li>
             <li>Available Quantity: {product.availableQuantity}</li>
           </ul>

@@ -20,4 +20,7 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
     @EntityGraph(attributePaths = {"product", "product.category"})
     Optional<InventoryEntity> findInventoryById(Long id);
 
+    @EntityGraph(attributePaths = {"product", "product.category"})
+    Optional<InventoryEntity> findByProductId(Long productId);
+
 }

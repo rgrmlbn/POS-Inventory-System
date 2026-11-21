@@ -78,7 +78,7 @@ public class InventoryServiceImpl implements InventoryService {
     @CacheEvict(value = "inventory", key = "#id")
     public InventoryResponse updateInventoryById(Long id, InventoryUpdateRequest request) {
         InventoryEntity inventory = inventoryRepository.findInventoryById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory"));
 
         inventory.setProductQuantity(request.getQuantity());
         return inventoryMapper.toResponse(inventoryRepository.save(inventory));
@@ -97,23 +97,33 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public void increaseStock(Long productId, int productQuantity) {
 
-        InventoryEntity inventory = inventoryRepository.findInventoryById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+        if (productQuantity <= 0) {
+            throw new IllegalArgumentException("Stock quantity must be greater than zero.");
+        }
+
+        InventoryEntity inventory = inventoryRepository.findByProductId(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory"));
 
         inventory.setProductQuantity(inventory.getProductQuantity() + productQuantity);
         inventoryRepository.save(inventory);
     }
 
     @Override
+    @Transactional
     public void decreaseStock(Long productId, int productQuantity) {
 
-        InventoryEntity inventory = inventoryRepository.findInventoryById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product"));
+        if (productQuantity <= 0) {
+            throw new IllegalArgumentException("Stock quantity must be greater than zero.");
+        }
+
+        InventoryEntity inventory = inventoryRepository.findByProductId(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory"));
 
         if(inventory.getProductQuantity() < productQuantity) {
-            throw new IllegalArgumentException("Insufficient stock for product ID: " + productId);
+            throw new IllegalArgumentException("Insufficient stock for product: " + inventory.getProduct().getProductName());
         }
 
         inventory.setProductQuantity(inventory.getProductQuantity() - productQuantity);

@@ -4,6 +4,7 @@ import { Pagination } from "../../../shared/components/Pagination";
 import { PurchaseList } from "../components/PurchaseList";
 import { usePurchasesPageQuery } from "../hooks/usePurchasesPageQuery"; 
 import { PurchaseSearchForm } from "../components/PurchaseSearchForm";
+import { PurchaseCreateForm } from "../components/PurchaseCreateForm";
 
 
 export function PurchasePage() {
@@ -20,6 +21,8 @@ export function PurchasePage() {
   return (
     <div>
       <h1>Purchases</h1>
+
+      <PurchaseCreateForm />
 
       <PurchaseSearchForm
         onSearch={(name) => {

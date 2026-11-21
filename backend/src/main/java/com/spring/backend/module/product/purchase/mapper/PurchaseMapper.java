@@ -22,6 +22,7 @@ public class PurchaseMapper {
     public PurchaseResponse toResponse(PurchaseEntity entity){
         return PurchaseResponse.builder()
                 .id(entity.getId())
+                .productId(entity.getProduct().getId())
                 .productName(entity.getProduct().getProductName())
                 .purchaseQuantity(entity.getPurchaseQuantity())
                 .unitCost(entity.getUnitCost())

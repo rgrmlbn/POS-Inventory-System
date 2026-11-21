@@ -38,7 +38,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PurchaseResponse> getPurchaseByProductId(
+    public ResponseEntity<PurchaseResponse> getPurchaseById(
             @PathVariable @Positive Long id){
 
         return ResponseEntity.ok(purchaseService.getPurchaseById(id));

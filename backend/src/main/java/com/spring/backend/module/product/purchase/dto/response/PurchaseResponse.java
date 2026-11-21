@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class PurchaseResponse {
 
     private Long id;
+    private Long productId;
     private String productName;
     private Integer purchaseQuantity;
     private BigDecimal unitCost;

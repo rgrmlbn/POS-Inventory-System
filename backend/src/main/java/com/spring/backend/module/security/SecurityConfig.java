@@ -36,8 +36,6 @@ import com.spring.backend.module.security.filter.RateLimitFilter;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-    private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
     private final CustomAuthEntryPoint authEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final RateLimitFilter rateLimitFilter;
@@ -108,6 +106,8 @@ public class SecurityConfig {
                                 "/api/v1/inventories/productName",
                                 "/api/v1/inventories/{id}",
 
+                                "/api/v1/inventories/{id}/update",
+
                                 // -> Temporary public sales endpoints
                                 "/api/v1/sales",
                                 "/api/v1/sales/productName",
@@ -116,7 +116,10 @@ public class SecurityConfig {
                                 //  -> Temporary public purchase endpoints
                                 "/api/v1/purchases",
                                 "/api/v1/purchases/productName",
-                                "/api/v1/purchases/{id}"
+                                "/api/v1/purchases/{id}",
+
+                                "/api/v1/purchases",
+                                "/api/v1/purchases/create"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
