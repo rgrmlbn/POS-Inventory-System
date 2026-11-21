@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    Page<ProductResponse> getAllProducts(int page, int size);
+    List<ProductResponse> getAllProducts();
 
     Page<ProductResponse> getAllProductsByProductName(String productName, int page, int size);
 

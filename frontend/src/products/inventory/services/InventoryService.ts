@@ -4,6 +4,7 @@ import type { Inventory, InventoryPage } from "../types/Inventory";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const InventoryService = {
+  // -> GET ENDPOINTS
   async getAllInventoriesByProductName(
     productName: string,
     page: number = 0,
@@ -18,6 +19,14 @@ export const InventoryService = {
           size,
         },
       },
+    );
+
+    return response.data;
+  },
+
+  async getAllInventories() {
+    const response = await axios.get<Inventory[]>(
+      BASE_URL + "/api/v1/inventories/",
     );
 
     return response.data;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDeleteProductMutation } from "../hooks/useDeleteProductMutation";
+import { useDeleteProductMutation } from "../hooks/delete/useDeleteProductMutation";
 
 export function ProductDeleteButton({ id }: { id: number }) {
   const { deleteProduct, deleting } = useDeleteProductMutation();

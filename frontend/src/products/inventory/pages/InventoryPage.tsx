@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Pagination } from "../../../shared/components/Pagination";
 import { InventoryList } from "../components/InventoryList";
-import { useInventoriesQuery } from "../hooks/useInventoriesQuery";
+import { useInventoriesPageQuery } from "../hooks/get/useInventoriesPage";
 import { InventorySearchForm } from "../components/InventorySearchForm";
 
 export function InventoryPage() {
@@ -10,7 +10,7 @@ export function InventoryPage() {
   const [size, setSize] = useState(10);
   const [productName, setProductName] = useState("");
 
-  const { inventories, totalPages, loading, error } = useInventoriesQuery(
+  const { inventories, totalPages, loading, error } = useInventoriesPageQuery(
     productName,
     page,
     size,
@@ -31,7 +31,11 @@ export function InventoryPage() {
         }}
       />
 
-      <InventoryList inventories={inventories} loading={loading} error={error} />
+      <InventoryList
+        inventories={inventories}
+        loading={loading}
+        error={error}
+      />
 
       <Pagination
         page={page}

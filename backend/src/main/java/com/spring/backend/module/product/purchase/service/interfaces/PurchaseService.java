@@ -4,9 +4,11 @@ import com.spring.backend.module.product.purchase.dto.request.PurchaseCreateRequ
 import com.spring.backend.module.product.purchase.dto.response.PurchaseResponse;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface PurchaseService {
 
-    Page<PurchaseResponse> getAllPurchases(int page, int size);
+    List<PurchaseResponse> getAllPurchases();
 
     Page<PurchaseResponse> getAllPurchasesByProductName(String productName, int page, int size);
 

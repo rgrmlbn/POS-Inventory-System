@@ -1,6 +1,6 @@
 // pages/ProductDetailPage.tsx
 import { useParams, Link } from "react-router-dom";
-import { useInventoryQuery } from "../hooks/useInventoryQuery";
+import { useInventoryQuery } from "../hooks/get/useInventoryQuery";
 
 export function InventoryDetailPage() {
   const { id } = useParams();

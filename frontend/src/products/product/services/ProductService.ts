@@ -9,7 +9,6 @@ import type {
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const ProductService = {
-  
   // -> GET ENDPOINTS
   async getAllProductsByProductName(
     productName: string,
@@ -25,6 +24,14 @@ export const ProductService = {
           size,
         },
       },
+    );
+
+    return response.data;
+  },
+
+  async getAllProducts() {
+    const response = await axios.get<Product[]>(
+      BASE_URL + "/api/v1/products",
     );
 
     return response.data;
@@ -58,14 +65,10 @@ export const ProductService = {
 
   // -> DELETE ENDPOINTS
   async deleteProductById(id: number) {
-    await axios.delete(
-      BASE_URL + "/api/v1/products/" + id + "/delete"
-    );
+    await axios.delete(BASE_URL + "/api/v1/products/" + id + "/delete");
   },
 
   async deleteAllProducts() {
-    await axios.delete(
-      BASE_URL + "/api/v1/products/delete-all"
-    );
+    await axios.delete(BASE_URL + "/api/v1/products/delete-all");
   },
 };

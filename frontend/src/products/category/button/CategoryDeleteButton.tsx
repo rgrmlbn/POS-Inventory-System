@@ -2,7 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDeleteCategoryMutation } from "../hooks/useDeleteCategoryMutation";
+import { useDeleteCategoryMutation } from "../hooks/delete/useDeleteCategoryMutation";
 
 export function CategoryDeleteButton({ id }: { id: number }) {
   const { deleteCategory, deleting } = useDeleteCategoryMutation();

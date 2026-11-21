@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useUpdateProductMutation } from "../hooks/useUpdateProductMutation";
+import { useUpdateProductMutation } from "../hooks/patch/useUpdateProductMutation";
 import type { Product, ProductCreateRequest } from "../types/Product";
-import { useCategoriesQuery } from "../../category/hooks/useCategoriesQuery";
+import { useCategoriesQuery } from "../../category/hooks/get/useCategoriesQuery";
 
 interface ProductEditFormProps {
   product: Product;
@@ -124,7 +124,6 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
               {category.categoryName}
             </option>
           ))}
-          
         </select>
         {categoriesLoading && <p>Loading categories...</p>}
         {categoriesError && <p>Failed to load categories.</p>}

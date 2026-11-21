@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,13 +37,11 @@ public class SaleServiceImpl implements SaleService {
     private final ProductRepository productRepository;
 
     @Override
-    public Page<SaleResponse> getAllSales(int page, int size){
+    public List<SaleResponse> getAllSales(){
 
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
-
-        Page<SaleEntity> products = saleRepository.findAll(pageable);
-
-        return products.map(SaleEntity -> saleMapper.toResponse(SaleEntity));
+        return saleRepository.findAll().stream()
+                .map(SaleEntity -> saleMapper.toResponse(SaleEntity))
+                .toList();
     }
 
     @Override

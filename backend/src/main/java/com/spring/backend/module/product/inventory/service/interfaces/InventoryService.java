@@ -5,9 +5,11 @@ import com.spring.backend.module.product.inventory.dto.response.InventoryRespons
 import com.spring.backend.module.product.product.entity.ProductEntity;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface InventoryService {
 
-    Page<InventoryResponse> getAllInventories(int page, int size);
+    List<InventoryResponse> getAllInventories();
 
     Page<InventoryResponse> getAllInventoriesByProductName(String productName, int page, int size);
 
@@ -15,7 +17,7 @@ public interface InventoryService {
 
     InventoryResponse getInventoryById(Long id);
 
-    InventoryResponse updateProductInventory(Long productId, InventoryUpdateRequest request);
+    InventoryResponse updateInventoryById(Long id, InventoryUpdateRequest request);
 
     void increaseStock(Long productId, int productQuantity);   // used by purchase
     void decreaseStock(Long productId, int productQuantity);   // used by sale, throws if quantity > stock

@@ -23,6 +23,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -33,13 +35,11 @@ public class ProductServiceImpl implements ProductService {
     private final InventoryService inventoryService;
 
     @Override
-    public Page<ProductResponse> getAllProducts(int page, int size) {
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(ProductEntity -> productMapper.toResponse(ProductEntity))
+                .toList();
 
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
-
-        Page<ProductEntity> products = productRepository.findAll(pageable);
-
-        return products.map(ProductEntity -> productMapper.toResponse(ProductEntity));
     }
 
     @Override

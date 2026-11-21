@@ -1,18 +1,15 @@
 import { PurchaseService } from "../services/PurchaseService";
 
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-export function usePurchasesQuery(productName: string, page: number, size: number) {
+export function usePurchasesQuery() {
   const query = useQuery({
-    queryKey: ["purchases", productName, page, size],
-    queryFn: () =>
-      PurchaseService.getAllPurchasesByProductName(productName, page, size),
-    placeholderData: keepPreviousData,
+    queryKey: ["purchases", "all"],
+    queryFn: () => PurchaseService.getAllPurchases(),
   });
 
   return {
-    purchases: query.data?.content ?? [],
-    totalPages: query.data?.totalPages ?? 0,
+    purchases: query.data ?? [],
     loading: query.isLoading,
     error: query.error,
   };

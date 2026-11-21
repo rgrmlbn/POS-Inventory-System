@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { InventoryService } from "../services/InventoryService";
+import { InventoryService } from "../../services/InventoryService";
 
 export function useInventoryQuery(id: number) {
   const query = useQuery({

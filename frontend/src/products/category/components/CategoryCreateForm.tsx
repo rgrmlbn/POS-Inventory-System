@@ -1,7 +1,7 @@
 // components/CategoryCreateForm.tsx
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useCreateCategoryMutation } from "../hooks/useCreateCategoryMutation";
+import { useCreateCategoryMutation } from "../hooks/post/useCreateCategoryMutation";
 import type { CategoryCreateRequest } from "../types/Category";
 
 export function CategoryCreateForm() {

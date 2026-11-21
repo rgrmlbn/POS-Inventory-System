@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/inventories")
 @RequiredArgsConstructor
@@ -19,11 +21,9 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @GetMapping()
-    public ResponseEntity<Page<InventoryResponse>> getAllInventories(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size ){
+    public ResponseEntity<List<InventoryResponse>> getAllInventories(){
 
-        return ResponseEntity.ok(inventoryService.getAllInventories(page, size));
+        return ResponseEntity.ok(inventoryService.getAllInventories());
     }
 
     @GetMapping("/productName")
@@ -36,7 +36,7 @@ public class InventoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InventoryResponse> getInventoryByProductId(
+    public ResponseEntity<InventoryResponse> getInventoryById(
             @PathVariable @Positive Long id){
 
         return ResponseEntity.ok(inventoryService.getInventoryById(id));
@@ -44,9 +44,9 @@ public class InventoryController {
 
     @PostMapping("/{productId}/update")
     public ResponseEntity<InventoryResponse> updateInventory(
-            @PathVariable @Positive Long productId,
+            @PathVariable @Positive Long id,
             @RequestBody InventoryUpdateRequest request){
         // Implementation for updating inventory
-        return ResponseEntity.ok(inventoryService.updateProductInventory(productId, request));
+        return ResponseEntity.ok(inventoryService.updateInventoryById(id, request));
     }
 }

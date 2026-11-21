@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +29,11 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final  InventoryService inventoryService;
 
     @Override
-    public Page<PurchaseResponse> getAllPurchases(int page, int size) {
+    public List<PurchaseResponse> getAllPurchases() {
 
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
-
-        Page<PurchaseEntity> products = purchaseRepository.findAll(pageable);
-
-        return products.map(PurchaseEntity -> purchaseMapper.toResponse(PurchaseEntity));
+        return purchaseRepository.findAll().stream()
+                .map(PurchaseEntity -> purchaseMapper.toResponse(PurchaseEntity))
+                .toList();
     }
 
     @Override

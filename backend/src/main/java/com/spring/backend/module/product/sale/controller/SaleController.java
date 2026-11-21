@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/sales")
 @RequiredArgsConstructor
@@ -19,11 +21,9 @@ public class SaleController {
     private final SaleService saleService;
 
     @GetMapping
-    public ResponseEntity<Page<SaleResponse>> getAllSales(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<SaleResponse>> getAllSales() {
 
-        return ResponseEntity.ok(saleService.getAllSales(page, size));
+        return ResponseEntity.ok(saleService.getAllSales());
     }
 
     @GetMapping("/productName")

@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
@@ -28,13 +30,12 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InventoryResponse> getAllInventories(int page, int size){
+    public List<InventoryResponse> getAllInventories(){
 
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return inventoryRepository.findAll().stream()
+                .map(InventoryEntity -> inventoryMapper.toResponse(InventoryEntity))
+                .toList();
 
-        Page<InventoryEntity> products = inventoryRepository.findAll(pageable);
-
-        return products.map(CategoryEntity -> inventoryMapper.toResponse(CategoryEntity));
     }
 
 
@@ -74,9 +75,9 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "inventory", key = "#productId")
-    public InventoryResponse updateProductInventory(Long productId, InventoryUpdateRequest request) {
-        InventoryEntity inventory = inventoryRepository.findInventoryById(productId)
+    @CacheEvict(value = "inventory", key = "#id")
+    public InventoryResponse updateInventoryById(Long id, InventoryUpdateRequest request) {
+        InventoryEntity inventory = inventoryRepository.findInventoryById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         inventory.setProductQuantity(request.getQuantity());

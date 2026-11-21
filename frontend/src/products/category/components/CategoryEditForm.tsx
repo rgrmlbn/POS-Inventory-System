@@ -1,7 +1,7 @@
 // components/CategoryEditForm.tsx
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useUpdateCategoryMutation } from "../hooks/useUpdateCategoryMutation";
+import { useUpdateCategoryMutation } from "../hooks/patch/useUpdateCategoryMutation";
 import type { Category, CategoryCreateRequest } from "../types/Category";
 
 interface CategoryEditFormProps {

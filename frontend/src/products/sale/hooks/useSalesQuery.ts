@@ -1,18 +1,15 @@
 import { SaleService } from "../services/SaleService";
 
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-export function useSalesQuery(productName: string, page: number, size: number) {
+export function useSalesQuery() {
   const query = useQuery({
-    queryKey: ["sales", productName, page, size],
-    queryFn: () =>
-      SaleService.getAllSalesByProductName(productName, page, size),
-    placeholderData: keepPreviousData,
+    queryKey: ["sales", "all"],
+    queryFn: () => SaleService.getAllSales()
   });
 
   return {
-    sales: query.data?.content ?? [],
-    totalPages: query.data?.totalPages ?? 0,
+    sales: query.data ?? [],
     loading: query.isLoading,
     error: query.error,
   };

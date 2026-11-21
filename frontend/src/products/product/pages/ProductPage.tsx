@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useProductsQuery } from "../hooks/useProductsQuery";
+import { useProductsPageQuery } from "../hooks/get/useProductsPageQuery";
 import { ProductList } from "../components/ProductList";
 import { ProductSearchForm } from "../components/ProductSearchForm";
 import { Pagination } from "../../../shared/components/Pagination";
@@ -10,7 +10,7 @@ export function ProductPage() {
   const [size, setSize] = useState(10);
   const [productName, setProductName] = useState("");
 
-  const { products, totalPages, loading, error } = useProductsQuery(
+  const { products, totalPages, loading, error } = useProductsPageQuery(
     productName,
     page,
     size,

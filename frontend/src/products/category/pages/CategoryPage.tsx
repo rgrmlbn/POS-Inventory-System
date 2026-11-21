@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCategoriesPageQuery } from "../hooks/useCategoriesPageQuery";
+import { useCategoriesPageQuery } from "../hooks/get/useCategoriesPageQuery";
 import { Pagination } from "../../../shared/components/Pagination";
 import { CategoryList } from "../components/CategoryList";
 import { CategorySearchForm } from "../components/CategorySearchForm";

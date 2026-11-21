@@ -4,6 +4,7 @@ import type { Sale, SalePage } from "../types/Sale";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const SaleService = {
+  // -> GET ENDPOINTS
   async getAllSalesByProductName(
     productName: string,
     page: number = 0,
@@ -23,10 +24,17 @@ export const SaleService = {
     return response.data;
   },
 
+  async getAllSales() {
+    const response = await axios.get<Sale[]>(
+      BASE_URL + "/api/v1/sales"
+    );
+
+    return response.data;
+  },
+
   async getSaleById(id: number) {
     const response = await axios.get<Sale>(
-      BASE_URL + "/api/v1/sales/" + id,
-    );
+      BASE_URL + "/api/v1/sales/" + id);
 
     return response.data;
   },

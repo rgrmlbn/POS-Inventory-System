@@ -1,21 +1,21 @@
-import { InventoryService } from "../services/InventoryService";
+import { ProductService } from "../../services/ProductService";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-export function useInventoriesQuery(
+export function useProductsPageQuery(
   productName: string,
   page: number,
   size: number,
 ) {
   const query = useQuery({
-    queryKey: ["inventories", productName, page, size],
+    queryKey: ["products", productName, page, size],
     queryFn: () =>
-      InventoryService.getAllInventoriesByProductName(productName, page, size),
+      ProductService.getAllProductsByProductName(productName, page, size),
     placeholderData: keepPreviousData,
   });
 
   return {
-    inventories: query.data?.content ?? [],
+    products: query.data?.content ?? [],
     totalPages: query.data?.totalPages ?? 0,
     loading: query.isLoading,
     error: query.error,

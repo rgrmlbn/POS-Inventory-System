@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CategoryService } from "../services/CategoryService";
+import { CategoryService } from "../../services/CategoryService";
 
 export function useDeleteCategoryMutation() {
   const queryClient = useQueryClient();
@@ -15,6 +15,6 @@ export function useDeleteCategoryMutation() {
   return {
     deleteCategory: mutation.mutate,
     deleting: mutation.isPending,
-    error: mutation.error
+    error: mutation.error,
   };
 }

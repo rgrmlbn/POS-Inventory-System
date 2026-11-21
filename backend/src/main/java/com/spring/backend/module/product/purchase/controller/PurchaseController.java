@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/purchases")
 @RequiredArgsConstructor
@@ -21,11 +23,9 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     @GetMapping
-    public ResponseEntity<Page<PurchaseResponse>> getAllPurchases(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<PurchaseResponse>> getAllPurchases() {
 
-        return ResponseEntity.ok(purchaseService.getAllPurchases(page, size));
+        return ResponseEntity.ok(purchaseService.getAllPurchases());
     }
 
     @GetMapping("/productName")

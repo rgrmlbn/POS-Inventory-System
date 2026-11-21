@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProductService } from "../services/ProductService";
+import { ProductService } from "../../services/ProductService";
 
 export function useDeleteProductMutation() {
   const queryClient = useQueryClient();
@@ -15,6 +15,6 @@ export function useDeleteProductMutation() {
   return {
     deleteProduct: mutation.mutate,
     deleting: mutation.isPending,
-    error: mutation.error
+    error: mutation.error,
   };
 }

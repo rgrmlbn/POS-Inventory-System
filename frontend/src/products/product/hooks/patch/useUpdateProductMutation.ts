@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProductService } from "../services/ProductService";
-import type { ProductUpdateRequest } from "../types/Product";
+import { ProductService } from "../../services/ProductService";
+import type { ProductUpdateRequest } from "../../types/Product";
 
 interface UpdateProductVariables {
   id: number;

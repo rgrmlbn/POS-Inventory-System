@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Pagination } from "../../../shared/components/Pagination";
 import { SaleList } from "../components/SaleList";
-import { useSalesQuery } from "../hooks/useSalesQuery"; 
+import { useSalesPageQuery } from "../hooks/useSalesPageQuery"; 
 import { SaleSearchForm } from "../components/SaleSearchForm";
 
 
@@ -11,7 +11,7 @@ export function SalePage() {
   const [size, setSize] = useState(10);
   const [productName, setProductName] = useState("");
 
-  const { sales, totalPages, loading, error } = useSalesQuery(
+  const { sales, totalPages, loading, error } = useSalesPageQuery(
     productName,
     page,
     size,

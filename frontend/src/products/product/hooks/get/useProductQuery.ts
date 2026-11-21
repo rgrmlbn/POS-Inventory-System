@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ProductService } from "../services/ProductService";
+import { ProductService } from "../../services/ProductService";
 
 export function useProductQuery(id: number) {
   const query = useQuery({

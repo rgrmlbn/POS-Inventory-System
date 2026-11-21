@@ -1,6 +1,6 @@
 // pages/ProductDetailPage.tsx
 import { useParams, Link } from "react-router-dom";
-import { useProductQuery } from "../hooks/useProductQuery";
+import { useProductQuery } from "../hooks/get/useProductQuery";
 import type { Product } from "../types/Product";
 import { ProductEditForm } from "../components/ProductEditForm";
 import { ProductDeleteButton } from "../button/ProductDeleteButton";
