@@ -3,6 +3,7 @@ export interface Product {
     productName: string
     sku: string
     barcode: string
+    categoryId: number
     categoryName: string
     costPrice: number
     sellingPrice: number

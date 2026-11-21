@@ -1,10 +1,14 @@
 import axios from "axios";
-import type { Category, CategoryPage, CategoryCreateRequest, CategoryUpdateRequest } from "../types/Category";
+import type {
+  Category,
+  CategoryPage,
+  CategoryCreateRequest,
+  CategoryUpdateRequest,
+} from "../types/Category";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const CategoryService = {
-
   // -> GET ENDPOINTS
   async getAllCategoriesByCategoryName(
     categoryName: string,
@@ -20,6 +24,14 @@ export const CategoryService = {
           size,
         },
       },
+    );
+
+    return response.data;
+  },
+
+  async getAllCategories() {
+    const response = await axios.get<Category[]>(
+      BASE_URL + "/api/v1/categories",
     );
 
     return response.data;
@@ -42,7 +54,7 @@ export const CategoryService = {
     return response.data;
   },
 
-    // -> PATCH ENDPOINTS
+  // -> PATCH ENDPOINTS
   async updateCategoryById(id: number, request: CategoryUpdateRequest) {
     const response = await axios.patch<Category>(
       BASE_URL + "/api/v1/categories/" + id + "/update",
@@ -53,15 +65,10 @@ export const CategoryService = {
 
   // -> DELETE ENDPOINTS
   async deleteCategoryById(id: number) {
-    await axios.delete(
-      BASE_URL + "/api/v1/categories/" + id + "/delete"
-    );
+    await axios.delete(BASE_URL + "/api/v1/categories/" + id + "/delete");
   },
 
   async deleteAllCategories() {
-    await axios.delete(
-      BASE_URL + "/api/v1/categories/delete-all"
-    );
+    await axios.delete(BASE_URL + "/api/v1/categories/delete-all");
   },
-  
 };

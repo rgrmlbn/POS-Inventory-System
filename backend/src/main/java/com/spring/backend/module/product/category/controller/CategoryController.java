@@ -24,13 +24,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-//    @GetMapping
-//    public ResponseEntity<Page<CategoryResponse>> getAllCategories(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size){
-//
-//        return  ResponseEntity.ok(categoryService.getAllCategories(page, size));
-//    }
+    @GetMapping
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(
+){
+
+        return  ResponseEntity.ok(categoryService.getAllCategories());
+    }
 
     @GetMapping("/categoryName")
 //    @PreAuthorize("hasAuthority('CATEGORY_READ')")

@@ -16,6 +16,7 @@ public class ProductDetailedResponse {
     private String productName;
     private String sku;
     private String barcode;
+    private Long categoryId;
     private String categoryName;
     private BigDecimal costPrice;
     private BigDecimal sellingPrice;

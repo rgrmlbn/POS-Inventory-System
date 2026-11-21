@@ -20,15 +20,14 @@ function CategoryItem({ category }: { category: Category }) {
         onDone={() => setIsEditing(false)}
       />
     );
-  }
-
-  return (
-    <div>
-      <h2>{category.categoryName}</h2>
-      <button onClick={() => setIsEditing(true)}>Edit</button>
-      <CategoryDeleteButton id={category.id} /> {/* new */}
-    </div>
-  );
+  } else
+    return (
+      <div>
+        <h2>{category.categoryName}</h2>
+        <button onClick={() => setIsEditing(true)}>Edit</button>
+        <CategoryDeleteButton id={category.id} /> {/* new */}
+      </div>
+    );
 }
 
 export function CategoryList({

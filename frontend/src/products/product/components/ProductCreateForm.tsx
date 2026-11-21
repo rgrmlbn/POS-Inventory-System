@@ -6,11 +6,12 @@ import type { ProductCreateRequest } from "../types/Product";
 
 export function ProductCreateForm() {
   const { createProduct, creating } = useCreateProductMutation();
+
   const {
     categories,
     loading: categoriesLoading,
     error: categoriesError,
-  } = useCategoriesQuery({ categoryName: "", page: 0, size: 100 });
+  } = useCategoriesQuery();
 
   const {
     register,
@@ -101,6 +102,7 @@ export function ProductCreateForm() {
       </div>
 
       <div>
+        <label>Category:</label>
         <select
           disabled={creating || categoriesLoading || Boolean(categoriesError)}
           {...register("categoryId", {
@@ -119,9 +121,9 @@ export function ProductCreateForm() {
         </select>
         {categoriesLoading && <p>Loading categories...</p>}
         {categoriesError && <p>Failed to load categories.</p>}
-        {!categoriesLoading &&
-          !categoriesError &&
-          categories.length === 0 && <p>Create a category first.</p>}
+        {!categoriesLoading && !categoriesError && categories.length === 0 && (
+          <p>Create a category first.</p>
+        )}
         {errors.categoryId && <p>{errors.categoryId.message}</p>}
       </div>
 

@@ -1,22 +1,20 @@
 // components/CategoryDeleteButton.tsx
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useDeleteCategoryMutation } from "../hooks/useDeleteCategoryMutation";
 
-interface CategoryDeleteButtonProps {
-  id: number;
-}
-
-export function CategoryDeleteButton({ id }: CategoryDeleteButtonProps) {
+export function CategoryDeleteButton({ id }: { id: number }) {
   const { deleteCategory, deleting } = useDeleteCategoryMutation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   function handleDelete() {
     setErrorMessage(null); // clear the old error before trying again
 
     deleteCategory(id, {
       onSuccess: () => {
-        // UI work after a successful delete (optional)
+        navigate("/categories");
       },
       onError: (error) => {
         const message = axios.isAxiosError(error)

@@ -28,7 +28,7 @@ export function CategoryCreateForm() {
             : "Failed to create category."; // 3. if false
 
           // show the server error under the field
-          setError("categoryName", { type: "server", message });
+          setError("root.server", { type: "server", message });
         },
       },
     );
@@ -52,6 +52,8 @@ export function CategoryCreateForm() {
       </button>
 
       {errors.categoryName && <p>{errors.categoryName.message}</p>}
+      
+      {errors.root?.server && <p>{errors.root.server.message}</p>}
     </form>
   );
 }

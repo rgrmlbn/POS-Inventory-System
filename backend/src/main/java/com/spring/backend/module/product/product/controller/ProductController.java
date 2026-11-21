@@ -79,19 +79,19 @@ public class ProductController {
 
     @PatchMapping("/{id}/update")
 //    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
-    public ResponseEntity<ProductResponse> updateProductById(
-            @PathVariable @Positive Long productId,
+    public ResponseEntity<ProductDetailedResponse> updateProductById(
+            @PathVariable @Positive Long id,
             @RequestBody @Valid ProductUpdateRequest update) {
 
-        return ResponseEntity.ok(productService.updateProductById(productId, update));
+        return ResponseEntity.ok(productService.updateProductById(id, update));
     }
 
     @DeleteMapping("/{id}/delete")
 //    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
     public ResponseEntity<Void> deleteProductById(
-            @PathVariable @Positive Long productId) {
+            @PathVariable @Positive Long id) {
 
-        productService.deleteProductById(productId);
+        productService.deleteProductById(id);
 
         return ResponseEntity.noContent().build();
     }

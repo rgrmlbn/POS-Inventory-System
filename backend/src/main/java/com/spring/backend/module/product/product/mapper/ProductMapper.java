@@ -27,6 +27,7 @@ public class ProductMapper {
         return ProductResponse.builder()
                 .id(entity.getId())
                 .productName(entity.getProductName())
+                .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getCategoryName())
                 .sellingPrice(entity.getSellingPrice())
                 .build();
@@ -38,6 +39,7 @@ public class ProductMapper {
                 .productName(entity.getProductName())
                 .sku(entity.getSku())
                 .barcode(entity.getBarcode())
+                .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getCategoryName())
                 .costPrice(entity.getCostPrice())
                 .sellingPrice(entity.getSellingPrice())

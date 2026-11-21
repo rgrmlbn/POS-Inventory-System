@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "product", key = "#id")
+//    @Cacheable(value = "product", key = "#id")
     public ProductDetailedResponse getProductById(Long id) {
 
         ProductEntity product = productRepository.findProductById(id)
@@ -117,10 +117,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @CachePut(value = "product", key = "#productId")
-    public ProductResponse updateProductById(Long productId, ProductUpdateRequest update) {
+//    @CachePut(value = "product", key = "#id")
+    public ProductDetailedResponse updateProductById(Long id, ProductUpdateRequest update) {
 
-        ProductEntity product = productRepository.findProductById(productId)
+        ProductEntity product = productRepository.findProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         if (update.getProductName() != null && !update.getProductName().isBlank()) {
@@ -162,21 +162,21 @@ public class ProductServiceImpl implements ProductService {
             product.setReorderLevel(update.getReorderLevel());
         }
 
-        return productMapper.toResponse(productRepository.save(product));
+        return productMapper.toDetailedResponse(productRepository.save(product));
     }
 
     @Override
     @Transactional
     @Caching(evict = {
-            @CacheEvict(value = "product", key = "#productId"),
-            @CacheEvict(value = "inventory", key = "#productId")
+            @CacheEvict(value = "product", key = "#id"),
+            @CacheEvict(value = "inventory", key = "#id")
     })
-    public void deleteProductById(Long productId) {
+    public void deleteProductById(Long id) {
 
-        ProductEntity product = productRepository.findProductById(productId)
+        ProductEntity product = productRepository.findProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
-        productRepository.deleteById(productId);
+        productRepository.delete(product);
 
     }
 

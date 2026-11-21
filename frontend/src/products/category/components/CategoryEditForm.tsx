@@ -5,8 +5,8 @@ import { useUpdateCategoryMutation } from "../hooks/useUpdateCategoryMutation";
 import type { Category, CategoryCreateRequest } from "../types/Category";
 
 interface CategoryEditFormProps {
-  category: Category;
-  onDone: () => void; // close edit mode
+  category: Category
+  onDone: () => void // close edit mode
 }
 
 export function CategoryEditForm({ category, onDone }: CategoryEditFormProps) {
@@ -34,7 +34,7 @@ export function CategoryEditForm({ category, onDone }: CategoryEditFormProps) {
             ? (error.response?.data?.message ?? "Failed to update category.")
             : "Failed to update category.";
 
-          setError("categoryName", { type: "server", message });
+          setError("root.server", { type: "server", message });
         },
       },
     );
@@ -60,6 +60,7 @@ export function CategoryEditForm({ category, onDone }: CategoryEditFormProps) {
       </button>
 
       {errors.categoryName && <p>{errors.categoryName.message}</p>}
+      {errors.root?.server && <p>{errors.root.server.message}</p>}
     </form>
   );
 }

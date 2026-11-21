@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -29,18 +31,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CategoryResponse> getAllCategories(int page, int size){
-
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
-
-        Page<CategoryEntity> products = categoryRepository.findAll(pageable);
-
-        return products.map(CategoryEntity -> categoryMapper.toResponse(CategoryEntity));
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryEntity -> categoryMapper.toResponse(CategoryEntity))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-//    @Cacheable("categoryPagesAll")
     public Page<CategoryResponse> getAllCategoriesByCategoryName(
             String categoryName,
             int page,

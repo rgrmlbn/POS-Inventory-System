@@ -1,27 +1,14 @@
+import { useQuery } from "@tanstack/react-query";
 import { CategoryService } from "../services/CategoryService";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-interface CategoriesQueryParams {
-  categoryName: string;
-  page: number;
-  size: number;
-};
-
-export function useCategoriesQuery({
-  categoryName,
-  page,
-  size,
-}: CategoriesQueryParams) {
+export function useCategoriesQuery() {
   const query = useQuery({
-    queryKey: ["categories", { categoryName, page, size }],
-    queryFn: () =>
-      CategoryService.getAllCategoriesByCategoryName(categoryName, page, size),
-    placeholderData: keepPreviousData,
+    queryKey: ["categories", "all"],
+    queryFn: () => CategoryService.getAllCategories(),
   });
 
   return {
-    categories: query.data?.content ?? [],
-    totalPages: query.data?.totalPages ?? 0,
+    categories: query.data ?? [],
     loading: query.isLoading,
     error: query.error,
   };

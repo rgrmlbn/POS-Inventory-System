@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CategoryService {
 
-    Page<CategoryResponse> getAllCategories(int page, int size);
+    List<CategoryResponse> getAllCategories();
 
     Page<CategoryResponse> getAllCategoriesByCategoryName(String categoryName, int size, int page);
 

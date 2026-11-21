@@ -40,6 +40,6 @@ public class ProductEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer reorderLevel;
 
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private InventoryEntity inventory;
 }

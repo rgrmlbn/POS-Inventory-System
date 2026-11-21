@@ -5,7 +5,7 @@ import type { CategoryUpdateRequest } from "../types/Category";
 interface UpdateCategoryVariables {
   id: number;
   request: CategoryUpdateRequest;
-};
+}
 
 export function useUpdateCategoryMutation() {
   const queryClient = useQueryClient();
@@ -13,7 +13,8 @@ export function useUpdateCategoryMutation() {
   const mutation = useMutation({
     mutationFn: ({ id, request }: UpdateCategoryVariables) =>
       CategoryService.updateCategoryById(id, request),
-    onSuccess: (_data, { id }) => {
+
+    onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: ["category", id] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCategoriesQuery } from "../hooks/useCategoriesQuery";
+import { useCategoriesPageQuery } from "../hooks/useCategoriesPageQuery";
 import { Pagination } from "../../../shared/components/Pagination";
 import { CategoryList } from "../components/CategoryList";
 import { CategorySearchForm } from "../components/CategorySearchForm";
@@ -10,7 +10,7 @@ export function CategoryPage() {
   const [size, setSize] = useState(10);
   const [categoryName, setCategoryName] = useState("");
 
-  const { categories, totalPages, loading, error } = useCategoriesQuery(
+  const { categories, totalPages, loading, error } = useCategoriesPageQuery(
     categoryName,
     page,
     size,

@@ -15,6 +15,6 @@ export function useDeleteCategoryMutation() {
   return {
     deleteCategory: mutation.mutate,
     deleting: mutation.isPending,
-    error: mutation.error,
+    error: mutation.error
   };
 }
