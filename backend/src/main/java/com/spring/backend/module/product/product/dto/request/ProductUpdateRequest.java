@@ -39,4 +39,15 @@ public class ProductUpdateRequest {
             message = "Product image URL must be a Cloudinary image URL"
     )
     private String imageUrl;
+
+    @Pattern(
+            regexp = "^products/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            message = "Product image public ID is invalid"
+    )
+    private String imagePublicId;
+
+    @AssertTrue(message = "Product image URL and public ID must be provided together")
+    public boolean isImageDetailsValid() {
+        return (imageUrl == null) == (imagePublicId == null);
+    }
 }

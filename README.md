@@ -63,9 +63,17 @@ DB_PASSWORD=choose_a_local_mysql_password
 JWT_SECRET=replace_with_a_long_random_secret
 RESEND_API_KEY=your_resend_api_key
 OWNER_EMAIL=your_email_address
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_new_api_key
+CLOUDINARY_API_SECRET=your_new_api_secret
+CLOUDINARY_UPLOAD_PRESET=pos_system
 ```
 
 Use the same value for `DB_PASSWORD` as in the root `.env`. The application configuration refers to `RESEND_API_KEY` and `OWNER_EMAIL`, so provide values for them even if you are not testing email-related behavior. Do not commit either `.env` file.
+
+Set the Cloudinary upload preset to **Signed** in the Cloudinary console. The API key and secret belong only in `backend/.env` or the backend deployment environment; never put them in frontend variables. Rotate any Cloudinary API secret that has been shared or exposed.
+
+For an existing production database, run `ALTER TABLE products ADD COLUMN image_public_id VARCHAR(255) NULL;` before deploying the backend. See [the product image storage guide](./docs/product-image-storage.md) for the upload and deletion flow.
 
 To create an initial administrator, optionally add both of these variables to `backend/.env`:
 
@@ -109,6 +117,10 @@ To also delete their persisted data, use `docker compose -f docker-compose.dev.y
 | `JWT_SECRET` | Yes | Secret used to sign JWTs; use a strong, unique secret |
 | `RESEND_API_KEY` | Yes | Resend API key configured by the application |
 | `OWNER_EMAIL` | Yes | Notification email configured by the application |
+| `CLOUDINARY_CLOUD_NAME` | Yes | Cloudinary cloud name used by the backend |
+| `CLOUDINARY_API_KEY` | Yes | Cloudinary API key used to sign uploads and delete images |
+| `CLOUDINARY_API_SECRET` | Yes | Cloudinary API secret; backend only, never expose to the frontend |
+| `CLOUDINARY_UPLOAD_PRESET` | Yes | Signed Cloudinary preset used for product image uploads |
 | `BOOTSTRAP_ADMIN_EMAIL` | No | Email for optional initial administrator; set with the password below |
 | `BOOTSTRAP_ADMIN_PASSWORD` | No | Password for optional initial administrator; set with the email above |
 

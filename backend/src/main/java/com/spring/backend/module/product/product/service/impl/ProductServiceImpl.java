@@ -1,6 +1,7 @@
 package com.spring.backend.module.product.product.service.impl;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
+import com.spring.backend.module.exception.products.products.CloudinaryOperationException;
 import com.spring.backend.module.exception.products.products.DuplicateProductException;
 import com.spring.backend.module.product.category.entity.CategoryEntity;
 import com.spring.backend.module.product.category.repository.CategoryRepository;
@@ -19,6 +20,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,12 +29,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
     private final InventoryService inventoryService;
+    private final CloudinaryImageService cloudinaryImageService;
 
     @Override
     public List<ProductResponse> getAllProducts() {
@@ -161,11 +165,20 @@ public class ProductServiceImpl implements ProductService {
             product.setReorderLevel(update.getReorderLevel());
         }
 
-        if (update.getImageUrl() != null && !update.getImageUrl().isBlank()) {
+        String oldImagePublicId = product.getImagePublicId();
+        if (update.getImageUrl() != null) {
             product.setImageUrl(update.getImageUrl());
+            product.setImagePublicId(update.getImagePublicId());
         }
 
-        return productMapper.toDetailedResponse(productRepository.save(product));
+        ProductEntity savedProduct = productRepository.save(product);
+
+        if (oldImagePublicId != null
+                && !oldImagePublicId.equals(savedProduct.getImagePublicId())) {
+            deleteImage(oldImagePublicId);
+        }
+
+        return productMapper.toDetailedResponse(savedProduct);
     }
 
     @Override
@@ -180,6 +193,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product"));
 
         productRepository.delete(product);
+        deleteImage(product.getImagePublicId());
 
     }
 
@@ -188,6 +202,26 @@ public class ProductServiceImpl implements ProductService {
     @CacheEvict(value = "product", allEntries = true)
     public void deleteAllProducts() {
 
+        List<String> imagePublicIds = productRepository.findAll().stream()
+                .map(ProductEntity::getImagePublicId)
+                .toList();
         productRepository.deleteAll();
+
+        for (String imagePublicId : imagePublicIds) {
+            deleteImage(imagePublicId);
+        }
+    }
+
+    // -> Cloudinary helpder
+    private void deleteImage(String imagePublicId) {
+        if (imagePublicId == null || imagePublicId.isBlank()) {
+            return;
+        }
+
+        try {
+            cloudinaryImageService.deleteImage(imagePublicId);
+        } catch (CloudinaryOperationException exception) {
+            log.error("Could not delete Cloudinary image with public ID {}", imagePublicId, exception);
+        }
     }
 }

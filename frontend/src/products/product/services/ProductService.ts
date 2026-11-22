@@ -4,36 +4,40 @@ import type {
   ProductPage,
   ProductCreateSubmission,
   ProductUpdateSubmission,
+  CloudinaryUploadSignature
 } from "../types/Product";
 
 // -> BASE API URL
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-// -> CLOUDINARY IMAGE UPLOAD
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-
 async function uploadProductImage(image: File) {
-
-  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
-    throw new Error("Cloudinary upload is not configured.");
-  }
-
+  const signatureResponse = await axios.post<CloudinaryUploadSignature>(
+    BASE_URL + "/api/v1/products/image-upload-signature",
+  );
+  const upload = signatureResponse.data;
   const formData = new FormData();
   formData.append("file", image);
-  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  formData.append("upload_preset", upload.uploadPreset);
+  formData.append("public_id", upload.publicId);
+  formData.append("api_key", upload.apiKey);
+  formData.append("timestamp", upload.timestamp.toString());
+  formData.append("signature", upload.signature);
 
-  const response = await axios.post<{ secure_url?: string }>(
-    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+  const response = await axios.post<{
+    secure_url?: string;
+    public_id?: string;
+  }>(
+    "https://api.cloudinary.com/v1_1/" + upload.cloudName + "/image/upload",
     formData,
   );
   const imageUrl = response.data.secure_url;
+  const imagePublicId = response.data.public_id;
 
-  if (!imageUrl) {
-    throw new Error("Cloudinary did not return an image URL.");
+  if (!imageUrl || imagePublicId !== upload.publicId) {
+    throw new Error("Cloudinary returned invalid product image details.");
   }
 
-  return imageUrl;
+  return { imageUrl, imagePublicId };
 }
 
 export const ProductService = {
@@ -76,11 +80,11 @@ export const ProductService = {
   // -> POST ENDPOINTS
   async createProduct(request: ProductCreateSubmission) {
     const { image, ...product } = request;
-    const imageUrl = await uploadProductImage(image);
+    const imageDetails = await uploadProductImage(image);
 
     const response = await axios.post<Product>(
       BASE_URL + "/api/v1/products/create",
-      { ...product, imageUrl },
+      { ...product, ...imageDetails },
     );
     return response.data;
   },
@@ -91,9 +95,10 @@ export const ProductService = {
     let requestWithImage = product;
 
     if (image) {
+      const imageDetails = await uploadProductImage(image);
       requestWithImage = {
         ...product,
-        imageUrl: await uploadProductImage(image),
+        ...imageDetails,
       };
     }
 

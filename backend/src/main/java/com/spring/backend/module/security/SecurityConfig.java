@@ -86,6 +86,7 @@ public class SecurityConfig {
                                 "/api/v1/products",
                                 "/api/v1/products/productName",
                                 "/api/v1/products/{id}",
+                                "/api/v1/products/image-upload-signature",
 
                                 "/api/v1/products/create",
                                 "/api/v1/products/{id}/update",

@@ -15,7 +15,7 @@ class ProductCreateRequestTest {
 
     @Test
     void requiresCloudinaryImageUrl() {
-        ProductCreateRequest request = createRequest(null);
+        ProductCreateRequest request = createRequest(null, null);
 
         assertTrue(validator.validate(request).stream()
                 .anyMatch(error -> error.getPropertyPath().toString().equals("imageUrl")));
@@ -24,14 +24,26 @@ class ProductCreateRequestTest {
     @Test
     void acceptsCloudinaryImageUrl() {
         ProductCreateRequest request = createRequest(
-                "https://res.cloudinary.com/nplpshdr/image/upload/v123/products/item.jpg"
+                "https://res.cloudinary.com/nplpshdr/image/upload/v123/products/item.jpg",
+                "products/123e4567-e89b-12d3-a456-426614174000"
         );
 
         assertFalse(validator.validate(request).stream()
                 .anyMatch(error -> error.getPropertyPath().toString().equals("imageUrl")));
     }
 
-    private ProductCreateRequest createRequest(String imageUrl) {
+    @Test
+    void requiresManagedCloudinaryPublicId() {
+        ProductCreateRequest request = createRequest(
+                "https://res.cloudinary.com/nplpshdr/image/upload/v123/products/item.jpg",
+                "other-folder/item"
+        );
+
+        assertTrue(validator.validate(request).stream()
+                .anyMatch(error -> error.getPropertyPath().toString().equals("imagePublicId")));
+    }
+
+    private ProductCreateRequest createRequest(String imageUrl, String imagePublicId) {
         return ProductCreateRequest.builder()
                 .productName("Test product")
                 .sku("TEST-001")
@@ -41,6 +53,7 @@ class ProductCreateRequestTest {
                 .sellingPrice(BigDecimal.TEN)
                 .reorderLevel(0)
                 .imageUrl(imageUrl)
+                .imagePublicId(imagePublicId)
                 .build();
     }
 }

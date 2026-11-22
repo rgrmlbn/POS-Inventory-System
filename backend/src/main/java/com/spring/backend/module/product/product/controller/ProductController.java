@@ -2,8 +2,10 @@ package com.spring.backend.module.product.product.controller;
 
 import com.spring.backend.module.product.product.dto.request.ProductCreateRequest;
 import com.spring.backend.module.product.product.dto.request.ProductUpdateRequest;
+import com.spring.backend.module.product.product.dto.response.CloudinaryUploadSignatureResponse;
 import com.spring.backend.module.product.product.dto.response.ProductDetailedResponse;
 import com.spring.backend.module.product.product.dto.response.ProductResponse;
+import com.spring.backend.module.product.product.service.impl.CloudinaryImageService;
 import com.spring.backend.module.product.product.service.interfaces.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -24,6 +26,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final CloudinaryImageService cloudinaryImageService;
+
+    @PostMapping("/image-upload-signature")
+    public ResponseEntity<CloudinaryUploadSignatureResponse> createImageUploadSignature() {
+        return ResponseEntity.ok(cloudinaryImageService.createUploadSignature());
+    }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts() {

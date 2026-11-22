@@ -27,9 +27,13 @@ export interface ProductCreateRequest {
   sellingPrice: number;
   reorderLevel: number;
   imageUrl: string;
+  imagePublicId: string;
 }
 
-export type ProductCreateFormValues = Omit<ProductCreateRequest, "imageUrl">; // for edit because image already exists
+export type ProductCreateFormValues = Omit<
+  ProductCreateRequest,
+  "imageUrl" | "imagePublicId"
+>;
 
 export interface ProductCreateSubmission extends ProductCreateFormValues {
   image: File;
@@ -37,5 +41,15 @@ export interface ProductCreateSubmission extends ProductCreateFormValues {
 
 export interface ProductUpdateSubmission extends Partial<ProductCreateFormValues> {
   imageUrl?: string;
+  imagePublicId?: string;
   image?: File;
+}
+
+export interface CloudinaryUploadSignature {
+  cloudName: string;
+  apiKey: string;
+  uploadPreset: string;
+  publicId: string;
+  timestamp: number;
+  signature: string;
 }

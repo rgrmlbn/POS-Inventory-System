@@ -1,6 +1,7 @@
 package com.spring.backend.module.exception;
 
 import com.spring.backend.module.exception.common.ResourceNotFoundException;
+import com.spring.backend.module.exception.products.products.CloudinaryOperationException;
 import com.spring.backend.module.exception.user.auth.InvalidTokenException;
 import com.spring.backend.module.exception.user.auth.TokenExpiredException;
 import com.spring.backend.module.exception.user.auth.TokenRevokedException;
@@ -43,6 +44,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return apiResponseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(CloudinaryOperationException.class)
+    public ResponseEntity<ApiResponse> handleCloudinaryOperationException(CloudinaryOperationException ex) {
+        return apiResponseBuilder.error(HttpStatus.BAD_GATEWAY, ex.getMessage());
     }
 
     // → USER

@@ -54,4 +54,11 @@ public class ProductCreateRequest {
             message = "Product image URL must be a Cloudinary image URL"
     )
     private String imageUrl;
+
+    @NotBlank(message = "Product image public ID is required")
+    @Pattern(
+            regexp = "^products/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            message = "Product image public ID is invalid"
+    )
+    private String imagePublicId;
 }

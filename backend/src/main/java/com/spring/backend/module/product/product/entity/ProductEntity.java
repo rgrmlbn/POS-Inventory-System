@@ -43,6 +43,9 @@ public class ProductEntity extends BaseEntity {
     @Column(length = 2048)
     private String imageUrl;
 
+    @Column(name = "image_public_id", length = 255)
+    private String imagePublicId;
+
     @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
     private InventoryEntity inventory;
 }

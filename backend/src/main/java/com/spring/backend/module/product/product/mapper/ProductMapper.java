@@ -21,6 +21,7 @@ public class ProductMapper {
                 .sellingPrice(request.getSellingPrice())
                 .reorderLevel(request.getReorderLevel())
                 .imageUrl(request.getImageUrl())
+                .imagePublicId(request.getImagePublicId())
                 .build();
     }
 
