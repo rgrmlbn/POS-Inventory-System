@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,4 +46,12 @@ public class ProductCreateRequest {
     @NotNull(message = "Reorder level is required")
     @Min(value = 0, message = "Reorder level cannot be negative")
     private Integer reorderLevel;
+
+    @NotBlank(message = "Product image URL is required")
+    @Size(max = 2048, message = "Product image URL must be 2048 characters or fewer")
+    @Pattern(
+            regexp = "^https://res\\.cloudinary\\.com/[A-Za-z0-9_-]+/image/upload/.+$",
+            message = "Product image URL must be a Cloudinary image URL"
+    )
+    private String imageUrl;
 }

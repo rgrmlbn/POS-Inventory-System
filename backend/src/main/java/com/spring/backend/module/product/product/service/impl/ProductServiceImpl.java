@@ -143,10 +143,9 @@ public class ProductServiceImpl implements ProductService {
             product.setBarcode(update.getBarcode());
         }
 
-        CategoryEntity category = categoryRepository.findById(update.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category"));
-
         if(update.getCategoryId() != null) {
+            CategoryEntity category = categoryRepository.findById(update.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category"));
             product.setCategory(category);
         }
 
@@ -160,6 +159,10 @@ public class ProductServiceImpl implements ProductService {
 
         if(update.getReorderLevel()!= null) {
             product.setReorderLevel(update.getReorderLevel());
+        }
+
+        if (update.getImageUrl() != null && !update.getImageUrl().isBlank()) {
+            product.setImageUrl(update.getImageUrl());
         }
 
         return productMapper.toDetailedResponse(productRepository.save(product));

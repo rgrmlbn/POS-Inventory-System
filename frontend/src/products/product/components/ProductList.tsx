@@ -16,6 +16,15 @@ export function ProductList({ products, loading, error }: ProductListProps) {
     <>
       {products.map((product) => (
         <div key={product.id}>
+          {product.imageUrl && (
+            <img
+              src={product.imageUrl}
+              alt={product.productName}
+              width={120}
+              height={120}
+              loading="lazy"
+            />
+          )}
           <h2>{product.productName}</h2>
           <p>
             <b>Category: </b>

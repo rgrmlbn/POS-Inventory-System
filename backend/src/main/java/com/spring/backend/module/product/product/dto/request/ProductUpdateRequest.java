@@ -32,4 +32,11 @@ public class ProductUpdateRequest {
 
     @Min(value = 0, message = "Reorder level cannot be negative")
     private Integer reorderLevel;
+
+    @Size(max = 2048, message = "Product image URL must be 2048 characters or fewer")
+    @Pattern(
+            regexp = "^https://res\\.cloudinary\\.com/[A-Za-z0-9_-]+/image/upload/.+$",
+            message = "Product image URL must be a Cloudinary image URL"
+    )
+    private String imageUrl;
 }

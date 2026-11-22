@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProductService } from "../../services/ProductService";
-import type { ProductUpdateRequest } from "../../types/Product";
+import type { ProductUpdateSubmission } from "../../types/Product";
 
 interface ProductUpdateRequestVariables {
   id: number;
-  request: ProductUpdateRequest;
+  request: ProductUpdateSubmission;
 }
 
 export function useUpdateProductMutation() {

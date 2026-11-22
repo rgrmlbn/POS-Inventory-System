@@ -20,6 +20,7 @@ public class ProductMapper {
                 .costPrice(request.getCostPrice())
                 .sellingPrice(request.getSellingPrice())
                 .reorderLevel(request.getReorderLevel())
+                .imageUrl(request.getImageUrl())
                 .build();
     }
 
@@ -30,7 +31,7 @@ public class ProductMapper {
                 .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getCategoryName())
                 .sellingPrice(entity.getSellingPrice())
-                .availableQuantity(entity.getInventory().getProductQuantity())
+                .imageUrl(entity.getImageUrl())
                 .build();
     }
 
@@ -45,6 +46,7 @@ public class ProductMapper {
                 .costPrice(entity.getCostPrice())
                 .sellingPrice(entity.getSellingPrice())
                 .reorderLevel(entity.getReorderLevel())
+                .imageUrl(entity.getImageUrl())
                 .availableQuantity(entity.getInventory().getProductQuantity())
                 .build();
     }

@@ -8,6 +8,7 @@ export interface Product {
     costPrice: number
     sellingPrice: number
     reorderLevel: number
+    imageUrl: string | null
     availableQuantity: number
 }
 
@@ -25,6 +26,16 @@ export interface ProductCreateRequest {
   costPrice: number;
   sellingPrice: number;
   reorderLevel: number;
+  imageUrl: string;
 }
 
-export type ProductUpdateRequest = Partial<ProductCreateRequest>;
+export type ProductCreateFormValues = Omit<ProductCreateRequest, "imageUrl">; // for edit because image already exists
+
+export interface ProductCreateSubmission extends ProductCreateFormValues {
+  image: File;
+}
+
+export interface ProductUpdateSubmission extends Partial<ProductCreateFormValues> {
+  imageUrl?: string;
+  image?: File;
+}

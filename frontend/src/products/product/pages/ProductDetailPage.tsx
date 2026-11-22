@@ -17,6 +17,14 @@ function ProductItem({ product }: { product: Product }) {
     return (
       <div>
         <h1>{product.productName}</h1>
+        {product.imageUrl && (
+          <img
+            src={product.imageUrl}
+            alt={product.productName}
+            width={240}
+            height={240}
+          />
+        )}
         <button type="button" onClick={() => setIsEditing(true)}>
           Edit
         </button>

@@ -1,7 +1,8 @@
 import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateProductMutation } from "../hooks/patch/useUpdateProductMutation";
-import type { Product, ProductCreateRequest } from "../types/Product";
+import type { Product, ProductCreateFormValues } from "../types/Product";
 import { useCategoriesQuery } from "../../category/hooks/get/useCategoriesQuery";
 
 interface ProductEditFormProps {
@@ -11,6 +12,7 @@ interface ProductEditFormProps {
 
 export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
   const { updateProduct, updating } = useUpdateProductMutation();
+  const [selectedImage, setSelectedImage] = useState<File | undefined>();
 
   const {
     categories,
@@ -23,7 +25,7 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<ProductCreateRequest>({
+  } = useForm<ProductCreateFormValues>({
     defaultValues: {
       productName: product.productName,
       sku: product.sku,
@@ -35,7 +37,27 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
     }, // pre-fill the input
   });
 
-  function onSubmit(values: ProductCreateRequest) {
+  function onSubmit(values: ProductCreateFormValues) {
+    if (selectedImage && selectedImage.size > 5 * 1024 * 1024) {
+      setError("root.server", {
+        type: "validate",
+        message: "Image must be 5 MB or smaller.",
+      });
+      return;
+    }
+    if (
+      selectedImage &&
+      !["image/jpeg", "image/png", "image/gif", "image/webp"].includes(
+        selectedImage.type,
+      )
+    ) {
+      setError("root.server", {
+        type: "validate",
+        message: "Upload a JPEG, PNG, GIF, or WebP image.",
+      });
+      return;
+    }
+
     updateProduct(
       {
         id: product.id,
@@ -44,6 +66,7 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
           productName: values.productName.trim(),
           sku: values.sku.trim(),
           barcode: values.barcode.trim(),
+          image: selectedImage,
         },
       },
       {
@@ -182,6 +205,30 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
           })}
         />
         {errors.reorderLevel && <p>{errors.reorderLevel.message}</p>}
+      </div>
+
+      <div>
+        <label htmlFor={`product-image-${product.id}`}>Product image:</label>
+        {product.imageUrl && (
+          <div>
+            <img
+              src={selectedImage ? URL.createObjectURL(selectedImage) : product.imageUrl}
+              alt={product.productName}
+              width={120}
+              height={120}
+            />
+          </div>
+        )}
+        <input
+          id={`product-image-${product.id}`}
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          disabled={updating}
+          onChange={(event) => {
+            setSelectedImage(event.target.files?.[0]);
+          }}
+        />
+        <p>Optional. JPEG, PNG, GIF, or WebP; maximum 5 MB.</p>
       </div>
 
       <button type="submit" disabled={updating}>

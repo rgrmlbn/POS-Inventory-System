@@ -1,11 +1,13 @@
 import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCategoriesQuery } from "../../category/hooks/get/useCategoriesQuery";
 import { useCreateProductMutation } from "../hooks/post/useCreateProductMutation";
-import type { ProductCreateRequest } from "../types/Product";
+import type { ProductCreateFormValues } from "../types/Product";
 
 export function ProductCreateForm() {
   const { createProduct, creating } = useCreateProductMutation();
+  const [selectedImage, setSelectedImage] = useState<File | undefined>();
 
   const {
     categories,
@@ -18,8 +20,9 @@ export function ProductCreateForm() {
     handleSubmit,
     reset,
     setError,
+    clearErrors,
     formState: { errors },
-  } = useForm<ProductCreateRequest>({
+  } = useForm<ProductCreateFormValues>({
     defaultValues: {
       productName: "",
       sku: "",
@@ -31,21 +34,50 @@ export function ProductCreateForm() {
     },
   });
 
-  function onSubmit(values: ProductCreateRequest) {
+  function onSubmit(values: ProductCreateFormValues) {
+    if (!selectedImage) {
+      setError("root.server", {
+        type: "validate",
+        message: "A product image is required.",
+      });
+      return;
+    }
+    if (selectedImage.size > 5 * 1024 * 1024) {
+      setError("root.server", {
+        type: "validate",
+        message: "Image must be 5 MB or smaller.",
+      });
+      return;
+    }
+    if (
+      !["image/jpeg", "image/png", "image/gif", "image/webp"].includes(
+        selectedImage.type,
+      )
+    ) {
+      setError("root.server", {
+        type: "validate",
+        message: "Upload a JPEG, PNG, GIF, or WebP image.",
+      });
+      return;
+    }
+
     createProduct(
       {
         ...values,
         productName: values.productName.trim(),
         sku: values.sku.trim(),
         barcode: values.barcode.trim(),
+        image: selectedImage,
       },
       {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset();
+          setSelectedImage(undefined);
+        },
         onError: (error) => {
           const message = axios.isAxiosError(error)
             ? (error.response?.data?.message ?? "Failed to create product.")
             : "Failed to create product.";
-
           setError("root.server", { type: "server", message });
         },
       },
@@ -176,6 +208,21 @@ export function ProductCreateForm() {
           })}
         />
         {errors.reorderLevel && <p>{errors.reorderLevel.message}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="product-image">Product image:</label>
+        <input
+          id="product-image"
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          disabled={creating}
+          onChange={(event) => {
+            setSelectedImage(event.target.files?.[0]);
+            clearErrors("root.server");
+          }}
+        />
+        <p>Required. JPEG, PNG, GIF, or WebP; maximum 5 MB.</p>
       </div>
 
       <button

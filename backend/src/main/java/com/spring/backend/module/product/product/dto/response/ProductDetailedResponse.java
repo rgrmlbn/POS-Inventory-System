@@ -21,6 +21,7 @@ public class ProductDetailedResponse {
     private BigDecimal costPrice;
     private BigDecimal sellingPrice;
     private Integer reorderLevel;
+    private String imageUrl;
     private Integer availableQuantity;
 
 }
