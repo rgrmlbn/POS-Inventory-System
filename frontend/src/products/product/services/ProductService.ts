@@ -15,6 +15,7 @@ async function uploadProductImage(image: File) {
     BASE_URL + "/api/v1/products/image-upload-signature",
   );
   const upload = signatureResponse.data;
+  
   const formData = new FormData();
   formData.append("file", image);
   formData.append("upload_preset", upload.uploadPreset);
