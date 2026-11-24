@@ -232,7 +232,8 @@ The file input updates the state:
   type="file"
   accept="image/jpeg,image/png,image/gif,image/webp"
   onChange={(event) => {
-    setSelectedImage(event.target.files?.[0]);
+    const [file] = event.target.files ?? []; // value ?? null
+    setSelectedImage(file);
   }}
 />
 ```
@@ -240,7 +241,7 @@ The file input updates the state:
 This expression:
 
 ```typescript
-event.target.files?.[0]
+event.target.files ?? []
 ```
 
 means:

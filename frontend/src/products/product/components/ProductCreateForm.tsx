@@ -218,7 +218,8 @@ export function ProductCreateForm() {
           accept="image/jpeg,image/png,image/gif,image/webp"
           disabled={creating}
           onChange={(event) => {
-            setSelectedImage(event.target.files?.[0]);
+            const [file] = event.target.files ?? []; // value ?? null
+            setSelectedImage(file);
             clearErrors("root.server");
           }}
         />

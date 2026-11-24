@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Arrays;
+
 @Component
 public class IpExtractor {
 
@@ -33,7 +35,7 @@ public class IpExtractor {
 
         if (forwardedIp != null && !forwardedIp.isBlank()) {
             // → Return the first IP address in the forwarded header.
-            return forwardedIp.split(",")[0].trim();
+            return Arrays.asList(forwardedIp.split(",")).getFirst().trim();
         }
 
         // → Fall back to the IP address of the direct connection.

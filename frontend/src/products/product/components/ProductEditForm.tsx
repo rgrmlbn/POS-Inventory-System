@@ -212,7 +212,11 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
         {product.imageUrl && (
           <div>
             <img
-              src={selectedImage ? URL.createObjectURL(selectedImage) : product.imageUrl}
+              src={
+                selectedImage
+                  ? URL.createObjectURL(selectedImage)
+                  : product.imageUrl
+              }
               alt={product.productName}
               width={120}
               height={120}
@@ -225,7 +229,8 @@ export function ProductEditForm({ product, onDone }: ProductEditFormProps) {
           accept="image/jpeg,image/png,image/gif,image/webp"
           disabled={updating}
           onChange={(event) => {
-            setSelectedImage(event.target.files?.[0]);
+            const [file] = event.target.files ?? []; // value ?? null
+            setSelectedImage(file);
           }}
         />
         <p>Optional. JPEG, PNG, GIF, or WebP; maximum 5 MB.</p>
