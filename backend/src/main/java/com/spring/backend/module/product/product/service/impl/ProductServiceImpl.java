@@ -39,6 +39,12 @@ public class ProductServiceImpl implements ProductService {
     private final CloudinaryImageService cloudinaryImageService;
 
     @Override
+    @Transactional(readOnly = true)
+    public Long getTotalProductCount() {
+        return productRepository.count();
+    }
+
+    @Override
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(ProductEntity -> productMapper.toResponse(ProductEntity))

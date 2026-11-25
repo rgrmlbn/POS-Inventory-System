@@ -10,13 +10,13 @@ import { SaleDetailPage } from "../products/sale/pages/SaleDetailPage";
 import { PurchasePage } from "../products/purchase/pages/PurchasePage";
 import { PurchaseDetailPage } from "../products/purchase/pages/PurchaseDetailPage";
 import { Layout } from "../shared/components/Layout";
-import { Dashboard } from "../shared/components/dashboard";
+import { DashboardPage } from "../products/dashboard/pages/DashboardPage";
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
 
         <Route path="/products" element={<ProductPage />} />
 

@@ -30,6 +30,11 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final  InventoryService inventoryService;
 
     @Override
+    public BigDecimal getTotalPurchaseCost() {
+        return purchaseRepository.sumPurchaseCost().orElse(BigDecimal.ZERO);
+    }
+
+    @Override
     public List<PurchaseResponse> getAllPurchases() {
 
         return purchaseRepository.findAll().stream()

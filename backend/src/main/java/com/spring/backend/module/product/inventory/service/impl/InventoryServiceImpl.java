@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -27,6 +28,18 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getTotalProductQuantity() {
+        return inventoryRepository.sumProductQuantity().orElse(0L);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal getTotalInventoryValue() {
+        return inventoryRepository.sumInventoryValue().orElse(BigDecimal.ZERO);
+    }
 
     @Override
     @Transactional(readOnly = true)

@@ -4,9 +4,12 @@ import com.spring.backend.module.product.purchase.dto.request.PurchaseCreateRequ
 import com.spring.backend.module.product.purchase.dto.response.PurchaseResponse;
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface PurchaseService {
+
+    BigDecimal getTotalPurchaseCost();
 
     List<PurchaseResponse> getAllPurchases();
 
@@ -15,4 +18,5 @@ public interface PurchaseService {
     PurchaseResponse getPurchaseById(Long id);
 
     PurchaseResponse createPurchase(PurchaseCreateRequest request);
+
 }

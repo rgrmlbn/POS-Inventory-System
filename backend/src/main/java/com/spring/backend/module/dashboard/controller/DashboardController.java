@@ -1,6 +1,6 @@
 package com.spring.backend.module.dashboard.controller;
 
-import com.spring.backend.module.dashboard.dto.response.ProductCountResponse;
+import com.spring.backend.module.dashboard.dto.response.DashboardResponse;
 import com.spring.backend.module.dashboard.service.interfaces.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    @GetMapping("/product-count")
-    public ResponseEntity<ProductCountResponse> getProductCount() {
-        return ResponseEntity.ok(dashboardService.getProductCount());
+    @GetMapping("/all-data")
+    public ResponseEntity<DashboardResponse> getDashboardData() {
+        return ResponseEntity.ok(dashboardService.getDashboardData());
     }
 }

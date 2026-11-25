@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
@@ -17,5 +19,6 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
 
     @EntityGraph(attributePaths = {"saleItems", "saleItems.product"})
     Optional<SaleEntity> findSaleById(Long id);
+
 
 }

@@ -123,7 +123,7 @@ public class SecurityConfig {
                                 "/api/v1/purchases/create",
 
                                 // -> Temporary public dashboard endpoints
-                                "/api/v1/dashboard/product-count"
+                                "/api/v1/dashboard/all-data"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

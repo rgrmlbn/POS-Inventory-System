@@ -5,11 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductCountResponse {
+public class DashboardResponse {
 
-    private Long productCount;
+    private Long totalProductCount;
+    private Long totalProductQuantity;
+    private BigDecimal totalInventoryValue;
+    private BigDecimal totalPurchaseCost;
 }

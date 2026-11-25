@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface InventoryRepository extends JpaRepository<InventoryEntity, Long> {
@@ -22,5 +24,13 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
 
     @EntityGraph(attributePaths = {"product", "product.category"})
     Optional<InventoryEntity> findByProductId(Long productId);
+
+    @Query("SELECT SUM(inventoryEntity.productQuantity) FROM InventoryEntity inventoryEntity")
+    Optional<Long> sumProductQuantity();
+
+    @Query("SELECT SUM(inventoryEntity.productQuantity * productEntity.costPrice) " +
+            "FROM InventoryEntity inventoryEntity " +
+            "JOIN inventoryEntity.product productEntity")
+    Optional<BigDecimal> sumInventoryValue();
 
 }
