@@ -36,6 +36,11 @@ public class SaleServiceImpl implements SaleService {
     private final ProductRepository productRepository;
 
     @Override
+    public BigDecimal getSaleTotalAmount() {
+        return saleRepository.sumSaleTotalAmount().orElse(BigDecimal.ZERO);
+    }
+
+    @Override
     public List<SaleResponse> getAllSales(){
 
         return saleRepository.findAll().stream()

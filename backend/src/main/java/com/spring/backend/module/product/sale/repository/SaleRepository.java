@@ -20,5 +20,8 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
     @EntityGraph(attributePaths = {"saleItems", "saleItems.product"})
     Optional<SaleEntity> findSaleById(Long id);
 
+    @Query("SELECT SUM(saleEntity.totalAmount) FROM  SaleEntity saleEntity")
+    Optional<BigDecimal> sumSaleTotalAmount();
+
 
 }

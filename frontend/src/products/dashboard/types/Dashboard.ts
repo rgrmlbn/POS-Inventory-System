@@ -1,6 +1,8 @@
 export type Dashboard = {
-  totalProductCount: number;
-  totalProductQuantity: number;
-  totalInventoryValue: number;
-  totalPurchaseCost: number;
+  productCount: number;
+  inventoryProductQuantity: number;
+  outOfStockProductCount: number;
+  inventoryValue: number;
+  purchaseTotalCost: number;
+  saleTotalAmount: number;
 };

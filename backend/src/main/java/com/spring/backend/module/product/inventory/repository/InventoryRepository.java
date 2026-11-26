@@ -28,9 +28,13 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity, Long
     @Query("SELECT SUM(inventoryEntity.productQuantity) FROM InventoryEntity inventoryEntity")
     Optional<Long> sumProductQuantity();
 
+    long countByProductQuantity(Integer productQuantity);
+
     @Query("SELECT SUM(inventoryEntity.productQuantity * productEntity.costPrice) " +
             "FROM InventoryEntity inventoryEntity " +
             "JOIN inventoryEntity.product productEntity")
     Optional<BigDecimal> sumInventoryValue();
+
+
 
 }

@@ -40,8 +40,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long getTotalProductCount() {
+    public Long getProductCount() {
         return productRepository.count();
+    }
+
+    @Override
+    public List<ProductResponse> getAllOutOfStockProducts() {
+        return productRepository.findAllOutOfStock().stream()
+                .map(ProductEntity -> productMapper.toResponse(ProductEntity))
+                .toList();
     }
 
     @Override

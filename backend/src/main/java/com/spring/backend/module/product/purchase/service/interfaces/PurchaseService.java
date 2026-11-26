@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PurchaseService {
 
-    BigDecimal getTotalPurchaseCost();
+    BigDecimal getPurchaseTotalCost();
 
     List<PurchaseResponse> getAllPurchases();
 

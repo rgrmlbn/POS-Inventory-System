@@ -1,7 +1,7 @@
-package com.spring.backend.module.dashboard.controller;
+package com.spring.backend.module.product.dashboard.controller;
 
-import com.spring.backend.module.dashboard.dto.response.DashboardResponse;
-import com.spring.backend.module.dashboard.service.interfaces.DashboardService;
+import com.spring.backend.module.product.dashboard.dto.response.DashboardResponse;
+import com.spring.backend.module.product.dashboard.service.interfaces.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

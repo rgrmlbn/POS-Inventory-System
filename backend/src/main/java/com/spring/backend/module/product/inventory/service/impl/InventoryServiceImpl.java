@@ -31,13 +31,19 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long getTotalProductQuantity() {
+    public Long getInventoryProductQuantity() {
         return inventoryRepository.sumProductQuantity().orElse(0L);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public BigDecimal getTotalInventoryValue() {
+    public Long getOutOfStockProductCount() {
+        return inventoryRepository.countByProductQuantity(0);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal getInventoryValue() {
         return inventoryRepository.sumInventoryValue().orElse(BigDecimal.ZERO);
     }
 

@@ -11,7 +11,9 @@ import java.util.List;
 
 public interface ProductService {
 
-    Long getTotalProductCount();
+    Long getProductCount();
+
+    List<ProductResponse> getAllOutOfStockProducts();
 
     List<ProductResponse> getAllProducts();
 

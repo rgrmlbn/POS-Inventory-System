@@ -10,9 +10,11 @@ import java.util.List;
 
 public interface InventoryService {
 
-    Long getTotalProductQuantity();
+    Long getInventoryProductQuantity();
 
-    BigDecimal getTotalInventoryValue();
+    Long getAllOutOfStockProductCount();
+
+    BigDecimal getInventoryValue();
 
     List<InventoryResponse> getAllInventories();
 

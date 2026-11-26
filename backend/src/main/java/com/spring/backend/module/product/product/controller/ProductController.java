@@ -38,6 +38,12 @@ public class ProductController {
 
         return ResponseEntity.ok(productService.getAllProducts());
     }
+    @GetMapping("/outOfStockProducts")
+    public ResponseEntity<List<ProductResponse>> getAllOutOfStockProducts() {
+
+        return ResponseEntity.ok(productService.getAllOutOfStockProducts());
+    }
+
 
     @GetMapping("/productName")
     public ResponseEntity<Page<ProductResponse>> getAllProductsByName(

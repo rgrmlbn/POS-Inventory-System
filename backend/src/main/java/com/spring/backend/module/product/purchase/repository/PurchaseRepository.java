@@ -26,5 +26,5 @@ public interface PurchaseRepository extends JpaRepository<PurchaseEntity, Long> 
     Optional<PurchaseEntity> findPurchaseById(Long id);
 
     @Query("SELECT SUM(purchaseEntity.totalCost) FROM  PurchaseEntity purchaseEntity")
-    Optional<BigDecimal> sumPurchaseCost();
+    Optional<BigDecimal> sumPurchaseTotalCost();
 }
