@@ -28,7 +28,7 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardResponse getDashboardData() {
         Long productCount = productService.getProductCount();
         Long inventoryProductQuantity = inventoryService.getInventoryProductQuantity();
-        Long outOfStockProductCount = inventoryService.getOutOfStockProductCount();
+        Long outOfStockProductCount = inventoryService.getAllOutOfStockProductCount();
         BigDecimal inventoryValue = inventoryService.getInventoryValue();
         BigDecimal purchaseTotalCost = purchaseService.getPurchaseTotalCost();
         BigDecimal saleTotalAmount = saleService.getSaleTotalAmount();

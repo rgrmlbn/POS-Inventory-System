@@ -37,7 +37,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long getOutOfStockProductCount() {
+    public Long getAllOutOfStockProductCount() {
         return inventoryRepository.countByProductQuantity(0);
     }
 
